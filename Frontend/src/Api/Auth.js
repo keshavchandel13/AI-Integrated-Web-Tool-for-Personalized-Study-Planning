@@ -16,6 +16,20 @@ export const login = async ({ email, password }) => {
     }
 }
 
-export const signup = async({name, email, password})=>{
+export const signup = async ({ name, email, password }) => {
+    try {
+        const res = await axios.post(`${URLSearchParams}/signup`,
+            { name, email, password },
+            {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials:true
+            });
+            return res.data;
+
+    }
+    catch (err) {
+        console.log("Error in signup: ", err)
+        throw err;
+    }
 
 }

@@ -7,7 +7,7 @@ export default function Signup({ setLogin }) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const navigate = useNavigate()
-
+  // Sign-up--> 
   const submitSignup = async (e) => {
     e.preventDefault()
     try {
@@ -21,7 +21,7 @@ export default function Signup({ setLogin }) {
       alert("Signup failed. Please try again.")
     }
   }
-
+  // Handling form change -->
   const formChange = (e) => {
     const { name, value } = e.target
     if (name === 'email') setEmail(value)

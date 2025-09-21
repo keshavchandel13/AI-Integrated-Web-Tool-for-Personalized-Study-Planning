@@ -6,7 +6,7 @@ export default function Auth({ setLogin }) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const navigate = useNavigate()
-
+  // Login submit-->
   const submitLogin = async (e) => {
     e.preventDefault()
     try {
@@ -21,7 +21,7 @@ export default function Auth({ setLogin }) {
       alert("Login failed. Please check your credentials.")
     }
   }
-
+  // Form change -->
   const formChange = (e) => {
     const { name, value } = e.target
     if (name === 'email') setEmail(value)
