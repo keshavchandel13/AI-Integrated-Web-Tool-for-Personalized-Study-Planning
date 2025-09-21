@@ -1,6 +1,6 @@
 import sqlite3
 
-DATABASE = "Backend/database.db"  # path relative to your project root
+DATABASE = "Backend/database.db" 
 
 def init_db():
     conn = sqlite3.connect(DATABASE)
