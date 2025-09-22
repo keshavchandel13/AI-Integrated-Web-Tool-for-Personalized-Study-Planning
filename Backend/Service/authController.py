@@ -42,6 +42,11 @@ def login_controller():
     
     # Verify password
     if bcrypt.check_password_hash(stored_hash, password):
-        return jsonify({"message": "Login successful"}), 200
+        user_data = {
+        "id": user["id"],
+        "username": user["username"],
+        "email": user["email"]
+        }
+        return jsonify({"message": "Login successful", 'user':user_data}), 200
     
     return jsonify({"message": "Invalid credentials"}), 401

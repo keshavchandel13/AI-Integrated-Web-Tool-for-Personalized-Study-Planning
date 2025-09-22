@@ -14,7 +14,7 @@ export default function Signup({ setLogin }) {
       const res = await signup({ name, email, password })
       if (res) {
         alert("Signup successful! Please login.")
-        navigate('/') // redirect to login page
+        navigate('/')
       }
     } catch (err) {
       console.error("Error in signup: ", err)

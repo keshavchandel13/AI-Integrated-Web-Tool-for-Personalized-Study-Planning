@@ -13,7 +13,11 @@ app = Flask(__name__)
 # Initialize bcrypt with app
 bcrypt.init_app(app)
 
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+CORS(
+    app,
+    resources={r"/api/*": {"origins": "http://localhost:5173"}},
+    supports_credentials=True  # << THIS IS THE KEY
+)
 
 # Db teardown-->
 app.teardown_appcontext(close_connection)
@@ -21,6 +25,7 @@ app.teardown_appcontext(close_connection)
 # API - Blueprint for moduler codebase
 
 app.register_blueprint(auth_blueprint, url_prefix='/api/auth')
+
 
 
 
