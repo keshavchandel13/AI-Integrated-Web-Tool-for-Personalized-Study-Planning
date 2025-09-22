@@ -1,4 +1,5 @@
 from flask import Flask
+from extension import bcrypt
 from flask_cors import CORS
 from flask import request, jsonify
 
@@ -8,6 +9,10 @@ from Routes.authRoute import auth_blueprint
 
 
 app = Flask(__name__)
+
+# Initialize bcrypt with app
+bcrypt.init_app(app)
+
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Db teardown-->
