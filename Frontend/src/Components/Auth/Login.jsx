@@ -11,9 +11,8 @@ export default function Auth({ setLogin }) {
     e.preventDefault()
     try {
       const res = await login({ email, password })
-      console.log(res)
-      if (res) {
-        // localStorage.setItem("token", res.token)
+      console.log(res.user)
+      if (res.user) {
         localStorage.setItem("user", JSON.stringify(res.user))
         navigate('/home')
       }
