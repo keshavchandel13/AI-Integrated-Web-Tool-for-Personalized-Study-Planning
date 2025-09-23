@@ -13,7 +13,7 @@ export default function Sidebar() {
     { label: 'Syllabus', icon: <FaBook />, link: "/syllabus" },
     { label: 'Study Plan', icon: <GrPlan />, link: "/studyplan" },
     { label: 'Progress', icon: <GiProgression />, link: "/progress" },
-    { label: 'Quizes', icon: <LuBrain />, link: "/quiz" },
+    { label: 'Quizes', icon: <LuBrain />, link: "/quizes" },
   ]
   return (
     <div className="bg-gradient-to-b from-purple-50 to-blue-50 min-h-screen p-5 w-60">

@@ -3,6 +3,10 @@ import { Route, Routes } from 'react-router-dom'
 import AuthPage from '../Pages/AuthPage'
 import HomePage from '../Pages/HomePage'
 import Layout from '../Pages/Layout'
+import Syllabus from '../Pages/Syllabus'
+import StudyPlan from '../Pages/StudyPlan'
+import Progress from '../Pages/Progress'
+import Quizes from '../Pages/Quizes'
 export default function AppRoutes() {
     return (
         <div>
@@ -10,6 +14,10 @@ export default function AppRoutes() {
                 <Route path="/" element={<AuthPage />} />
                 <Route element={<Layout />}>
                     <Route path="/home" element={<HomePage />} />
+                    <Route path="/syllabus" element={<Syllabus />} />
+                    <Route path="/studyplan" element={<StudyPlan />} />
+                    <Route path="/progress" element={<Progress />} />
+                    <Route path="/quizes" element={<Quizes />} />
 
                 </Route>
             </Routes>

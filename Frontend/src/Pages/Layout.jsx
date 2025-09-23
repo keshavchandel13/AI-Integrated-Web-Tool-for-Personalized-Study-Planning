@@ -11,7 +11,7 @@ export default function Layout() {
         {/* Topbar */}
         <Topbar />
         {/* Routed content */}
-        <div style={{ padding: '20px' }}>
+        <div style={{ padding: '' }}>
           <Outlet />
         </div>
       </div>

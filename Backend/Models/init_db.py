@@ -17,15 +17,30 @@ def init_db():
         )
     """)
 
+    # Subjects table (new, fixed)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS subjects (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            title TEXT,
+            subject_name TEXT,
+            grade TEXT,
+            start_date TEXT,
+            end_date TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(user_id) REFERENCES users(id)
+        )
+    """)
+
     # Syllabus table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS syllabus (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
+            subject_id INTEGER,
             topic TEXT,
             difficulty TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY(user_id) REFERENCES users(id)
+            FOREIGN KEY(subject_id) REFERENCES subjects(id)
         )
     """)
 
@@ -33,13 +48,13 @@ def init_db():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS study_plan (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
+            subject_id INTEGER,
             day INTEGER,
             topic TEXT,
             allocated_time INTEGER,
             completed BOOLEAN DEFAULT 0,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY(user_id) REFERENCES users(id)
+            FOREIGN KEY(subject_id) REFERENCES subjects(id)
         )
     """)
 
@@ -47,13 +62,13 @@ def init_db():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS quizzes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
+            subject_id INTEGER,
             topic TEXT,
             question TEXT,
             options TEXT,
             answer TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY(user_id) REFERENCES users(id)
+            FOREIGN KEY(subject_id) REFERENCES subjects(id)
         )
     """)
 
@@ -61,11 +76,11 @@ def init_db():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS progress (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
+            subject_id INTEGER,
             topic_id INTEGER,
             completed BOOLEAN DEFAULT 0,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY(user_id) REFERENCES users(id),
+            FOREIGN KEY(subject_id) REFERENCES subjects(id),
             FOREIGN KEY(topic_id) REFERENCES syllabus(id)
         )
     """)

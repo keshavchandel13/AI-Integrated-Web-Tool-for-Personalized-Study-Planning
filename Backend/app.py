@@ -6,6 +6,8 @@ from flask import request, jsonify
 # Imports-->
 from config.db import get_db, close_connection
 from Routes.authRoute import auth_blueprint
+from Routes.syllabusRoute import syllabus_blueprint
+from Routes.subjectRoute import subject_blueprint
 
 
 app = Flask(__name__)
@@ -16,15 +18,16 @@ bcrypt.init_app(app)
 CORS(
     app,
     resources={r"/api/*": {"origins": "http://localhost:5173"}},
-    supports_credentials=True  # << THIS IS THE KEY
+    supports_credentials=True  
 )
 
 # Db teardown-->
 app.teardown_appcontext(close_connection)
 
 # API - Blueprint for moduler codebase
-
 app.register_blueprint(auth_blueprint, url_prefix='/api/auth')
+# app.register_blueprint(syllabus_blueprint, url_prefix='/api/syllabus')
+app.register_blueprint(subject_blueprint, url_prefix='/api/subject')
 
 
 

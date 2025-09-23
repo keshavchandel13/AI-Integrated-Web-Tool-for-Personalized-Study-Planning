@@ -18,7 +18,7 @@ export default function Signup({ setLogin }) {
       }
     } catch (err) {
       console.error("Error in signup: ", err)
-      alert("Signup failed. Please try again.")
+      alert("Signup failed")
     }
   }
   // Handling form change -->
