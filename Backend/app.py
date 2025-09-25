@@ -26,7 +26,7 @@ app.teardown_appcontext(close_connection)
 
 # API - Blueprint for moduler codebase
 app.register_blueprint(auth_blueprint, url_prefix='/api/auth')
-# app.register_blueprint(syllabus_blueprint, url_prefix='/api/syllabus')
+app.register_blueprint(syllabus_blueprint, url_prefix='/api/syllabus')
 app.register_blueprint(subject_blueprint, url_prefix='/api/subject')
 
 

@@ -4,7 +4,7 @@ import { FiBell, FiSearch, FiMessageCircle } from "react-icons/fi";
 export default function Topbar() {
   const user = JSON.parse(localStorage.getItem("user"))
   return (
- <header className="h-16 bg-white/80 backdrop-blur-sm border-b border-purple-100 flex items-center justify-between px-6">
+ <header className="h-16 bg-white/80 backdrop-blur-sm border-b border-purple-100 flex items-center justify-between px-6 ">
       {/* Search Bar */}
       <div className="flex-1 max-w-md">
         <div className="relative">

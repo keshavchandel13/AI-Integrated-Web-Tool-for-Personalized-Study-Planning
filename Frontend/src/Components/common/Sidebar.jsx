@@ -16,7 +16,7 @@ export default function Sidebar() {
     { label: 'Quizes', icon: <LuBrain />, link: "/quizes" },
   ]
   return (
-    <div className="bg-gradient-to-b from-purple-50 to-blue-50 min-h-screen p-5 w-60">
+    <div className="bg-gradient-to-b from-purple-50 to-blue-50 min-h-screen p-5 w-60 ">
       {/* Header */}
       <div className="flex items-center p-2">
         <div className='w-8 h-8 bg-gradient-to-br from-purple-400 to-blue-500 rounded-lg flex items-center justify-center'>

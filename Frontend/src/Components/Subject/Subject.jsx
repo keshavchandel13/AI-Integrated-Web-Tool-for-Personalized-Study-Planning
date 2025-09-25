@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FiBookOpen } from "react-icons/fi";
 import { addSubject as addSubjectApi, getSubjects } from "../../Api/Subject";
+import { Link } from "react-router-dom";
 
 export default function Subject({ userId }) {
   const date = new Date();
@@ -123,6 +124,7 @@ export default function Subject({ userId }) {
                 </div>
                 <div className="text-gray-500 text-sm text-right">
                   <p>{item.start_date} - {item.end_date}</p>
+               <button className="px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-purple-700 transition shadow mt-5">  <Link to={'/syllabus'} > View Syllabus </Link> </button>
                 </div>
               </div>
             ))
