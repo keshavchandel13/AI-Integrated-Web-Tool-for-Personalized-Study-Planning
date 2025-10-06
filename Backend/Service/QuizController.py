@@ -15,8 +15,6 @@ def getSubtopics(topic="Binary Search"):
 
 data = getSubtopics()
 
-
-
 #  Preprocess text
 
 def preprocess(data):
@@ -55,7 +53,7 @@ pos_tagged_sentences = tokenize_and_tag(sentences)
 
 
 
-# 5. Keyword Extraction (subtopics)
+#  Keyword Extraction (subtopics)
 
 def extract_keywords(pos_tagged_sentences):
     keywords = set()
@@ -71,6 +69,7 @@ def extract_keywords(pos_tagged_sentences):
     return list(keywords)
 
 subtopics = extract_keywords(pos_tagged_sentences)
+print(subtopics)
 
 
 

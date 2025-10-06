@@ -17,7 +17,7 @@ bcrypt.init_app(app)
 
 CORS(
     app,
-    resources={r"/api/*": {"origins": "http://localhost:5173"}},
+    resources={r"/api/*": {"origins": "*"}},
     supports_credentials=True  
 )
 

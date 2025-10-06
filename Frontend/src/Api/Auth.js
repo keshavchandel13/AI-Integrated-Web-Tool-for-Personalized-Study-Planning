@@ -18,7 +18,7 @@ export const login = async ({ email, password }) => {
 
 export const signup = async ({ name, email, password }) => {
     try {
-        const res = await axios.post(`${URLSearchParams}/api/auth/signup`,
+        const res = await axios.post(`${url}/api/auth/signup`,
             { name, email, password },
             {
                 headers: { 'Content-Type': 'application/json' },
