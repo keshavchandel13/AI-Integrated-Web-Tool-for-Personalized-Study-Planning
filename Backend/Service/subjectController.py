@@ -45,7 +45,7 @@ def get_subjects():
             return jsonify({"error": "user_id is required"}), 400
 
         cursor.execute('''
-            SELECT id, title, subject_name, grade, start_date, end_date
+            SELECT id, title, subject_name, grade, start_date, end_date, is_plan_generated
             FROM subjects
             WHERE user_id = ?
             ORDER BY start_date ASC
@@ -61,7 +61,8 @@ def get_subjects():
                 "subject_name": row[2],
                 "grade": row[3],
                 "start_date": row[4],
-                "end_date": row[5]
+                "end_date": row[5],
+                "is_plan_generated": row[6],
             })
 
         return jsonify(subjects), 200

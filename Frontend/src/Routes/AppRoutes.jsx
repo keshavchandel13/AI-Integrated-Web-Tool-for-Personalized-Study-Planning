@@ -7,6 +7,7 @@ import Syllabus from '../Pages/Syllabus'
 import StudyPlan from '../Pages/StudyPlan'
 import Progress from '../Pages/Progress'
 import Quizes from '../Pages/Quizes'
+import PrefrenceForm from '../Components/StudyPlan/PrefrenceForm'
 export default function AppRoutes() {
     return (
         <div>
@@ -18,6 +19,7 @@ export default function AppRoutes() {
                     <Route path="/studyplan" element={<StudyPlan />} />
                     <Route path="/progress" element={<Progress />} />
                     <Route path="/quizes" element={<Quizes />} />
+                    <Route path="/generatePlan" element={<PrefrenceForm />} />
 
                 </Route>
             </Routes>

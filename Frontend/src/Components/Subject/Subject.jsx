@@ -20,7 +20,7 @@ export default function Subject({ userId }) {
       const res = await getSubjects(userId);
       setSubj(res);
     } catch (err) {
-      alert(err);
+      console.log(err);
     }
   };
 
@@ -35,7 +35,7 @@ export default function Subject({ userId }) {
         setForm({ title: "", subject_name: "", start_date: "", end_date: "" });
       }
     } catch (err) {
-      alert(err);
+      console.log(err);
     }
   };
 
@@ -125,6 +125,7 @@ export default function Subject({ userId }) {
                 <div className="text-gray-500 text-sm text-right">
                   <p>{item.start_date} - {item.end_date}</p>
                <button className="px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-purple-700 transition shadow mt-5">  <Link to={'/syllabus'} > View Syllabus </Link> </button>
+               <button className="px-4 ml-3 py-2 rounded-lg bg-indigo-600 text-white hover:bg-purple-700 transition shadow mt-5">  <Link to={'/studyplan'} > Study Plan </Link> </button>
                 </div>
               </div>
             ))

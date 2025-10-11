@@ -8,6 +8,7 @@ from config.db import get_db, close_connection
 from Routes.authRoute import auth_blueprint
 from Routes.syllabusRoute import syllabus_blueprint
 from Routes.subjectRoute import subject_blueprint
+from Routes.studyPlanRoute import studyplan_blueprint
 
 
 app = Flask(__name__)
@@ -28,6 +29,7 @@ app.teardown_appcontext(close_connection)
 app.register_blueprint(auth_blueprint, url_prefix='/api/auth')
 app.register_blueprint(syllabus_blueprint, url_prefix='/api/syllabus')
 app.register_blueprint(subject_blueprint, url_prefix='/api/subject')
+app.register_blueprint(studyplan_blueprint, url_prefix='/api/studyplan')
 
 
 
