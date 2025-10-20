@@ -15,6 +15,7 @@ export default function Subject({ userId }) {
       for (const subject of subjects) {
         if (subject.is_plan_generated === 1) {
           const planData = await getstudyplan(subject.id);
+          console.log(planData)
           updatedPlans[subject.id] = planData;
         }
       }

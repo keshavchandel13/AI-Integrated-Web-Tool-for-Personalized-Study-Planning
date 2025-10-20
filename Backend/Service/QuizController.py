@@ -1,75 +1,210 @@
-import wikipediaapi
 import re
+import json
+import wikipediaapi
 import nltk
-from nltk import word_tokenize, sent_tokenize
+from nltk import sent_tokenize
+from google import genai
+from config.db import get_db
 
 
-#  Fetch summary text
+nltk.download('punkt', quiet=True)
 
-def getSubtopics(topic="Binary Search"):
+
+#  TEXT & WIKIPEDIA HELPERS
+
+
+def getSubtopics(topic):
+    """Fetch summary text for a topic from Wikipedia."""
     wiki_wiki = wikipediaapi.Wikipedia(user_agent='MyQuizApp/1.0')
-    page_py = wiki_wiki.page(topic)
-    if not page_py.exists():
-        return ""
-    return page_py.summary
+    page = wiki_wiki.page(topic)
+    return page.summary if page.exists() else ""
 
-data = getSubtopics()
-
-#  Preprocess text
 
 def preprocess(data):
+    """Clean and normalize the Wikipedia summary text."""
     if not data:
         return ""
-    #  whitespace removed
-    data = " ".join(data.split())
-    # Keep only alphanum, space, and parentheses 
-    data = re.sub(r'[^a-zA-Z0-9\s()]+', '', data)
-    # Lowercase
+    data = " ".join(data.split())  
+    data = re.sub(r'[^a-zA-Z0-9\s()]+', '', data)  
     return data.lower()
 
-preprocessData = preprocess(data)
-
-
-
-#  Sentence Tokenization
 
 def split_sentences(text):
+    """Split text into sentences using NLTK."""
     return sent_tokenize(text)
 
-sentences = split_sentences(preprocessData)
 
 
-#  Word Tokenization + POS tagging
-
-def tokenize_and_tag(sentences):
-    tokenized_sentences = []
-    for sent in sentences:
-        tokens = word_tokenize(sent)
-        pos_tags = nltk.pos_tag(tokens)
-        tokenized_sentences.append(pos_tags)
-    return tokenized_sentences
-
-pos_tagged_sentences = tokenize_and_tag(sentences)
+#  AI QUIZ GENERATION HELPERS
 
 
+def clean_ai_json(raw_text):
+    """
+    Cleans and parses AI-generated text into valid JSON.
+    Handles cases where AI wraps the JSON inside markdown ```json ... ``` blocks.
+    """
+    if not raw_text:
+        return []
 
-#  Keyword Extraction (subtopics)
+    try:
 
-def extract_keywords(pos_tagged_sentences):
-    keywords = set()
-    for sent in pos_tagged_sentences:
-        for i, (word, pos) in enumerate(sent):
-            # Single Nouns (NN, NNP, NNS)
-            if pos.startswith("NN"):
-                keywords.add(word)
-            # Adjective + Noun pair
-            if i < len(sent) - 1:
-                if pos.startswith("JJ") and sent[i+1][1].startswith("NN"):
-                    keywords.add(f"{word} {sent[i+1][0]}")
-    return list(keywords)
+        cleaned = re.sub(r"^```json\s*|\s*```$", "", raw_text.strip(), flags=re.DOTALL).strip()
 
-subtopics = extract_keywords(pos_tagged_sentences)
-print(subtopics)
+        data = json.loads(cleaned)
 
 
+        if isinstance(data, list):
+            return data
+        elif isinstance(data, dict):
+            return [data]
+        else:
+            return []
+    except Exception as e:
+        print(f" Failed to parse AI JSON: {e}")
+        return []
 
+
+def getQuestions(sentences, difficulty):
+    """Generate multiple-choice questions from text using Gemini API."""
+    client = genai.Client()
+
+    prompt = f"""
+    Generate 5 multiple-choice questions based on the following content:
+    {sentences}
+    Each question must include:
+    - 4 answer options labeled A–D
+    - The correct answer key (e.g. "B")
+    - Difficulty: {difficulty}
+
+    Return only valid JSON like this:
+    [
+        {{
+            "question": "...",
+            "options": ["A)...", "B)...", "C)...", "D)..."],
+            "answer": "B"
+        }}
+    ]
+    """
+    response = client.models.generate_content(model="gemini-2.5-flash", contents=prompt)
+    text = response.text if hasattr(response, "text") else str(response)
+
+    questions = clean_ai_json(text)
+    return questions if questions else text  
+#  CREATE QUIZ SERVICE
+def create_quiz_service(data):
+    """
+    Creates a quiz for a topic.
+    Expects data = {
+        'topic': 'Binary Search',
+        'difficulty': 'Medium',
+        'subject_id': 2,
+        'topic_id': 12
+    }
+    """
+    topic = data.get('topic')
+    difficulty = data.get('difficulty', 'Medium')
+    subject_id = data.get('subject_id')
+    topic_id = data.get('topic_id')
+
+    if not topic:
+        return {"error": "Missing topic name", "status": 400}
+
+    # Fetch Wikipedia text
+    # raw_text = getSubtopics(topic)
+    # if not raw_text:
+    #     return {"error": f"No Wikipedia data found for {topic}", "status": 404}
+    #
+    # clean_text = preprocess(raw_text)
+    # sentences = split_sentences(clean_text)
+
+
+
+    # Get AI-generated questions
+    questions_data = getQuestions(topic, difficulty)
+    print(" AI raw output:", questions_data)
+
+ 
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # Save to DB
+    if isinstance(questions_data, list):
+     
+        for q in questions_data:
+            try:
+                cursor.execute("""
+                    INSERT INTO quizzes (subject_id, topic_id, question, options, answer, difficulty_level)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                """, (
+                    subject_id,
+                    topic_id,
+                    q.get("question"),
+                    json.dumps(q.get("options", [])),  
+                    q.get("answer", ""),
+                    difficulty
+                ))
+            except Exception as e:
+                print(f" Failed to insert quiz question: {e}")
+    else:
+       
+        cursor.execute("""
+            INSERT INTO quizzes (subject_id, topic_id, question, options, answer, difficulty_level)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (
+            subject_id,
+            topic_id,
+            "Raw text response",
+            questions_data,
+            "",
+            difficulty
+        ))
+
+    conn.commit()
+    conn.close()
+
+    print(f" Quiz created successfully for topic: {topic}")
+    return {
+        "message": f"Quiz created successfully for topic '{topic}'.",
+        "topic": topic,
+        "difficulty": difficulty,
+        "questions": questions_data,
+        "status": 201
+    }
+#  GET QUIZ SERVICE
+def get_quiz_service(topic_id):
+    """Fetch quiz questions for a specific topic."""
+    if not topic_id:
+        return {"error": "Missing topic_id parameter", "status": 400}
+
+    conn = get_db()
+    cursor = conn.cursor()
+    print(" Fetching quiz for topic ID:", topic_id)
+
+    cursor.execute("SELECT * FROM quizzes WHERE topic_id = ?", (topic_id,))
+    rows = cursor.fetchall()
+    conn.close()
+
+    if not rows:
+        return {"message": "No quizzes found for this topic", "status": 404}
+
+    quizzes = []
+    for row in rows:
+        try:
+  
+            options = json.loads(row[4]) if row[4] else []
+        except Exception:
+       
+            print(f" Invalid JSON in quiz ID {row[0]}, returning as plain text")
+            options = [row[4]] if row[4] else []
+
+        quizzes.append({
+            "id": row[0],
+            "subject_id": row[1],
+            "topic_id": row[2],
+            "question": row[3],
+            "options": options,
+            "answer": row[5],
+            "difficulty_level": row[6]
+        })
+
+    return {"quizzes": quizzes, "status": 200}

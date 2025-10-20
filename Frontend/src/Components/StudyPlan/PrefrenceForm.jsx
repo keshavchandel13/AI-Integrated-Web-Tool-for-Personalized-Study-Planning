@@ -55,7 +55,7 @@ export default function PreferenceForm() {
         const planResponse = await generatePlanforsubject(subjectId);
       }
 
-      console.log("Generated Plan:", planResponse);
+
       setMessage("Preferences saved and plan generated successfully!");
 
       setTimeout(() => navigate("/studyplan"), 1500);

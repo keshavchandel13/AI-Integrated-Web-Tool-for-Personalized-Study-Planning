@@ -14,6 +14,7 @@ def generatePlan():
         if not subject_id:
             return jsonify({"error": "Subject ID is required"}), 400
 
+        # Fetch syllabus and preferences
         cursor.execute("SELECT id, topic, difficulty FROM syllabus WHERE subject_id = ?", (subject_id,))
         syllabus = cursor.fetchall()
         if not syllabus:
@@ -29,23 +30,47 @@ def generatePlan():
         difficulty_level = {"easy": 1, "medium": 2, "hard": 3}
 
         total_effort = sum(difficulty_level.get(dif.lower(), 2) for _, _, dif in syllabus)
+        total_available_minutes = total_days * total_minutes_per_day
+
+        # Calculate time needed per topic
+        time_per_topic_list = [
+            math.ceil((difficulty_level.get(dif.lower(), 2) / total_effort) * total_available_minutes)
+            for _, _, dif in syllabus
+        ]
+
         start_date = datetime.today()
-        current_day = 1
-        current_time = 0
         study_plan_data = []
+        current_day = 1
+        remaining_time_today = total_minutes_per_day
 
-        for topic_id, topic, difficulty in syllabus:
-            weight = difficulty_level.get(difficulty.lower(), 2)
-            time_per_topic = math.ceil((weight / total_effort) * (total_days * total_minutes_per_day))
+        for (topic_id, topic, difficulty), topic_time in zip(syllabus, time_per_topic_list):
+            while topic_time > 0:
+                # If topic fits in today's remaining time
+                if topic_time <= remaining_time_today:
+                    allocated = topic_time
+                    topic_time = 0
+                else:
+                    # Fill the day completely, carry remaining to next day
+                    allocated = remaining_time_today
+                    topic_time -= remaining_time_today
 
-            if current_time + time_per_topic > total_minutes_per_day:
-                current_day += 1
-                current_time = 0
+                assigned_date = (start_date + timedelta(days=current_day - 1)).strftime("%Y-%m-%d")
+                study_plan_data.append((subject_id, current_day, topic_id, allocated, 0, assigned_date))
+                remaining_time_today -= allocated
 
-            assigned_date = (start_date + timedelta(days=current_day - 1)).strftime("%Y-%m-%d")
-            study_plan_data.append((subject_id, current_day, topic_id, time_per_topic, 0, assigned_date))
-            current_time += time_per_topic
+                # If today's time is used up, move to next day
+                if remaining_time_today <= 0 and current_day < total_days:
+                    current_day += 1
+                    remaining_time_today = total_minutes_per_day
 
+                # Stop assigning if we've reached the max number of days
+                if current_day > total_days:
+                    break
+
+            if current_day > total_days:
+                break
+
+        # Insert into DB
         cursor.executemany("""
             INSERT INTO study_plan (subject_id, day, topic_id, allocated_time, completed, date_assigned)
             VALUES (?, ?, ?, ?, ?, ?)
@@ -55,8 +80,9 @@ def generatePlan():
         conn.commit()
 
         return jsonify({
-            "message": f"Study plan generated for {len(study_plan_data)} topics successfully!",
-            "days_planned": total_days
+            "message": f"Study plan generated successfully across {total_days} days.",
+            "topics_covered": len(set([x[2] for x in study_plan_data])),
+            "total_entries": len(study_plan_data)
         }), 201
 
     except Exception as e:
@@ -123,10 +149,7 @@ def subjectpreference():
 
     
     except Exception as err:
-        return jsonify({"error": str(err)}), 400
-
-
-        
+        return jsonify({"error": str(err)}), 400     
     finally:
         cursor.close()
         conn.close()
