@@ -15,7 +15,6 @@ export default function Subject({ userId }) {
       for (const subject of subjects) {
         if (subject.is_plan_generated === 1) {
           const planData = await getstudyplan(subject.id);
-          console.log(planData)
           updatedPlans[subject.id] = planData;
         }
       }
@@ -105,7 +104,7 @@ export default function Subject({ userId }) {
             {item.is_plan_generated === 1 && (
               <div className="bg-gray-50 border-t border-gray-200 p-5">
                 {plans[item.id] ? (
-                  <SubjectPlan plan={plans[item.id]} />
+                  <SubjectPlan plan={plans[item.id]} userId={userId} subjectId={item.id} />
                 ) : (
                   <p className="text-gray-400 text-center">Loading plan...</p>
                 )}

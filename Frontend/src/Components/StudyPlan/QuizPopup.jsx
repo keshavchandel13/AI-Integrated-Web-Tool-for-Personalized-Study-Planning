@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getQuiz, generateQuiz, updateProgress } from "../../Api/quizApi";
 
-export default function QuizPopup({ topicId, subjectId, topic, onClose }) {
+export default function QuizPopup({ topicId, subjectId, topic, onClose, userId }) {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
@@ -12,7 +12,6 @@ export default function QuizPopup({ topicId, subjectId, topic, onClose }) {
       try {
         let quizData;
         try {
-        console.log("This is topic id :",topicId)
           quizData = await getQuiz(topicId);
         } catch {
           // If not found, create a new quiz
@@ -40,21 +39,19 @@ export default function QuizPopup({ topicId, subjectId, topic, onClose }) {
     setAnswers({ ...answers, [qId]: answer });
   };
 
-
   const handleSubmit = async () => {
     let correct = 0;
     questions.forEach((q) => {
-      if (answers[q.id] && answers[q.id] === q.answer) {
+      if (answers[q.id] && answers[q.id].includes(q.answer)) {
         correct++;
       }
     });
-
     const finalScore = Math.round((correct / questions.length) * 100);
     setScore(finalScore);
 
     // Push to progress API
     await updateProgress({
-      user_id: 1,
+      user_id: userId,
       subject_id: subjectId,
       topic_id: topicId,
       quiz_score: finalScore,
@@ -74,15 +71,16 @@ export default function QuizPopup({ topicId, subjectId, topic, onClose }) {
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40 z-50">
-     <div className="bg-white w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-lg shadow-lg p-6 relative">
-
+      <div className="bg-white w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-lg shadow-lg p-6 relative">
         <button
           onClick={onClose}
           className="absolute top-2 right-3 text-gray-600 hover:text-gray-900 text-xl"
         >
           ✕
         </button>
-        <h2 className="text-xl font-semibold text-purple-700 mb-4">{topic} Quiz</h2>
+        <h2 className="text-xl font-semibold text-purple-700 mb-4">
+          {topic} Quiz
+        </h2>
 
         {score !== null ? (
           <div className="text-center">

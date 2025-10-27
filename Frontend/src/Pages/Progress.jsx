@@ -1,60 +1,117 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { getSubjectProgress } from "../Api/StudyPlan";
+import { getSubjects } from "../Api/Subject";
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { FiBookOpen } from "react-icons/fi";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function Progress() {
-  // Example progress data (later you can fetch from backend)
-  const [progressData] = useState([
-    {
-      id: 1,
-      subject: "Data Science",
-      totalTasks: 10,
-      completed: 6,
-    },
-    {
-      id: 2,
-      subject: "COA",
-      totalTasks: 8,
-      completed: 4,
-    },
-    {
-      id: 3,
-      subject: "Python Programming",
-      totalTasks: 12,
-      completed: 9,
-    },
-  ]);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user.id;
+
+  const [progressData, setProgressData] = useState({});
+  const [subjects, setSubjects] = useState([]);
+
+  //  Fetch subjects
+  const fetchSubjects = async () => {
+    try {
+      const res = await getSubjects(userId);
+      setSubjects(res);
+    } catch (err) {
+      console.log("Error fetching subjects:", err);
+    }
+  };
+
+  //  Fetch progress for each subject
+  const fetchProgress = async (subjectId) => {
+    try {
+      const res = await getSubjectProgress(userId, subjectId);
+      return res?.completion_percent || 0;
+    } catch (error) {
+      console.error("Error fetching progress:", error);
+      return 0;
+    }
+  };
+
+  //  Load all data
+  useEffect(() => {
+    const loadData = async () => {
+      await fetchSubjects();
+    };
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    const loadProgress = async () => {
+      const data = {};
+      for (const subject of subjects) {
+        const percent = await fetchProgress(subject.id);
+        data[subject.id] = percent;
+      }
+      setProgressData(data);
+    };
+    if (subjects.length > 0) loadProgress();
+  }, [subjects]);
 
   return (
-    <div className="bg-gradient-to-br from-white to-blue-50 min-h-screen p-6">
-      <h2 className="text-2xl font-semibold text-blue-900 mb-6">📊 Progress Tracker</h2>
+    <div className="p-6">
+      {subjects.length === 0 ? (
+        <p className="text-purple-500 text-center text-lg font-medium">
+          No subjects found.
+        </p>
+      ) : (
+        subjects.map((item) => {
+          const progress = progressData[item.id] || 0;
 
-      <div className="grid gap-6">
-        {progressData.map((item) => {
-          const percentage = Math.round((item.completed / item.totalTasks) * 100);
+          // Pie Chart Data
+          const pieData = {
+            labels: ["Completed", "Remaining"],
+            datasets: [
+              {
+                data: [progress, 100 - progress],
+                backgroundColor: ["#8b5cf6", "#e5e7eb"],
+                borderWidth: 0,
+              },
+            ],
+          };
+
           return (
             <div
               key={item.id}
-              className="p-4 bg-white rounded-xl border border-gray-200 shadow hover:shadow-md transition"
+              className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition overflow-hidden mb-6"
             >
-              <div className="flex justify-between items-center mb-2">
-                <p className="text-lg font-semibold text-blue-800">{item.subject}</p>
-                <span className="text-gray-600 text-sm">
-                  {item.completed}/{item.totalTasks} tasks
-                </span>
-              </div>
+              <div className="p-6 flex justify-between items-center">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <FiBookOpen className="text-purple-700 text-xl" />
+                    <p className="text-purple-900 font-semibold text-lg">
+                      {item.title}
+                    </p>
+                  </div>
 
-              {/* Progress Bar */}
-              <div className="w-full bg-gray-200 rounded-full h-4">
-                <div
-                  className="bg-green-600 h-4 rounded-full transition-all"
-                  style={{ width: `${percentage}%` }}
-                ></div>
-              </div>
+                  {/* Progress Bar */}
+                  <div className="w-64 bg-gray-200 rounded-full h-3">
+                    <div
+                      className="bg-purple-600 h-3 rounded-full"
+                      style={{ width: `${progress}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {progress}% completed
+                  </p>
+                </div>
 
-              <p className="text-right text-sm text-gray-500 mt-1">{percentage}% done</p>
+                {/* Pie Chart */}
+                <div className="w-24 h-24">
+                  <Pie data={pieData} />
+                </div>
+              </div>
             </div>
           );
-        })}
-      </div>
+        })
+      )}
     </div>
   );
 }

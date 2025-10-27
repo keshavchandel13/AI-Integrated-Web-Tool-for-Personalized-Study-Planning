@@ -10,6 +10,7 @@ from Routes.syllabusRoute import syllabus_blueprint
 from Routes.subjectRoute import subject_blueprint
 from Routes.studyPlanRoute import studyplan_blueprint
 from Routes.quizRoute import quiz_bp
+from Routes.progressRoute import progress_bp
 
 
 app = Flask(__name__)
@@ -32,6 +33,7 @@ app.register_blueprint(syllabus_blueprint, url_prefix='/api/syllabus')
 app.register_blueprint(subject_blueprint, url_prefix='/api/subject')
 app.register_blueprint(studyplan_blueprint, url_prefix='/api/studyplan')
 app.register_blueprint(quiz_bp, url_prefix='/api')
+app.register_blueprint(progress_bp, url_prefix='/api/progress')
 
 
 

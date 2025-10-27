@@ -16,6 +16,6 @@ export const generateQuiz = async (data) => {
 
 // Push progress (score, completion)
 export const updateProgress = async (payload) => {
-  const res = await axios.post(`${API_BASE}/progress`, payload);
+  const res = await axios.post(`${API_BASE}/progress/update`, payload);
   return res.data;
 };

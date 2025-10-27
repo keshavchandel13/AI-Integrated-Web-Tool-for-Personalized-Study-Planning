@@ -17,7 +17,6 @@ export const generatePlanforsubject = async (subjectId) => {
 
 export const getstudyplan = async(subjectId) =>{
   try{
-    console.log(subjectId)
     const res = await axios.get(`${url}/api/studyplan/getstudyplan`,{
     params: { subject_id: subjectId },
     });
@@ -29,3 +28,18 @@ export const getstudyplan = async(subjectId) =>{
 
   }
 }
+
+export const completedTopic = async (data) => {
+  try {
+    const res = await axios.post(`${url}/api/studyplan/topiccompleted`, data);
+    return res.data;
+  } catch (e) {
+    console.error("Error marking topic completed:", e);
+  }
+};
+
+export const getSubjectProgress = async (userId, subjectId) => {
+  const res = await axios.get(`${url}/api/progress/${userId}/${subjectId}`);
+  return res.data;
+};
+

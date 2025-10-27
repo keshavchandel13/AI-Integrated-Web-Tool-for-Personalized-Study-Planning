@@ -13,7 +13,7 @@ export default function Sidebar() {
     { label: "Syllabus", icon: <FaBook />, link: "/syllabus" },
     { label: "Study Plan", icon: <GrPlan />, link: "/studyplan" },
     { label: "Progress", icon: <GiProgression />, link: "/progress" },
-    { label: "Quizes", icon: <LuBrain />, link: "/quizes" },
+    // { label: "Quizes", icon: <LuBrain />, link: "/quizes" },
   ];
 
   const navigate = useNavigate();

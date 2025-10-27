@@ -101,12 +101,11 @@ def get_plan():
         cursor = conn.cursor()
 
         subject_id = request.args.get("subject_id")
-        print(subject_id)
         
 
         # Join study_plan with syllabus 
         cursor.execute("""
-            SELECT sp.id, sp.subject_id, sp.topic_id, s.topic, sp.allocated_time, sp.date_assigned, sp.day
+            SELECT sp.id, sp.subject_id, sp.topic_id, s.topic, sp.allocated_time, sp.date_assigned, sp.day, sp.completed
             FROM study_plan sp
             JOIN syllabus s ON sp.topic_id = s.id
             WHERE sp.subject_id = ?
@@ -117,7 +116,7 @@ def get_plan():
         # Convert each sqlite3.Row to a dictionary
         plan = [dict(row) for row in rows]
 
-        print("Fetched plan:", plan)
+
         return jsonify(plan)
 
     except Exception as e:
@@ -153,6 +152,77 @@ def subjectpreference():
     finally:
         cursor.close()
         conn.close()
+
+
+def update_topic():
+    conn = None
+    cursor = None
+    try:
+        data = request.get_json()
+        required_fields = ["user_id", "subject_id", "topic_id"]
+        missing = [f for f in required_fields if f not in data]
+
+        if missing:
+            return jsonify({
+                "error": "Missing required fields",
+                "missing": missing,
+                "received": data
+            }), 400
+        
+        user_id = data["user_id"]
+        subject_id = data["subject_id"]
+        topic_id = data["topic_id"]
+        completed = data.get("completed", True)
+        
+        conn = get_db()
+        cursor = conn.cursor()
+
+       
+        cursor.execute("""
+            SELECT id FROM progress
+            WHERE user_id = ? AND subject_id = ? AND topic_id = ?
+        """, (user_id, subject_id, topic_id))
+        existing = cursor.fetchone()
+
+        if existing:
+            cursor.execute("""
+                UPDATE progress
+                SET completed = ?, updated_at = ?
+                WHERE id = ?
+            """, (completed, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), existing[0]))
+        else:
+            cursor.execute("""
+                INSERT INTO progress (user_id, subject_id, topic_id, completed)
+                VALUES (?, ?, ?, ?)
+            """, (user_id, subject_id, topic_id, completed))
+
+     
+        cursor.execute("""
+            UPDATE study_plan
+            SET completed = 1
+            WHERE subject_id = ? AND topic_id = ?
+        """, (subject_id, topic_id))
+
+        conn.commit()
+
+        return jsonify({
+            "message": "Topic marked as completed ",
+            "topic_id": topic_id,
+            "completed": True
+        }), 200
+
+    except Exception as e:
+        print("Error in update_topic:", e)
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+
+    
         
         
     

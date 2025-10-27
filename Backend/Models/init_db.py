@@ -115,7 +115,7 @@ def init_db():
 
     conn.commit()
     conn.close()
-    print("✅ Database initialized successfully with updated schema!")
+    print(" Database initialized successfully with updated schema!")
 
 if __name__ == "__main__":
     print("Initializing database...")

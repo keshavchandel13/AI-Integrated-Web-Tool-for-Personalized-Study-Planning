@@ -8,7 +8,6 @@ export default function SyllabusList({ subjectId }) {
         const fetchData = async () => {
             try {
                 const res = await getsyllabus(subjectId);
-                console.log(res)
                 setSyllabusItems(res);
             } catch (err) {
                 console.error(err);
