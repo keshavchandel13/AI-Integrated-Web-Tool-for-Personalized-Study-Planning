@@ -5,7 +5,7 @@ DATABASE = "../database.db"
 def init_db():
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
-
+    
     # Users Table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
@@ -112,7 +112,24 @@ def init_db():
             FOREIGN KEY(subject_id) REFERENCES subjects(id)
         )
     """)
-
+    cursor.execute(
+        '''
+        CREATE TABLE IF NOT EXISTS notifications(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            subject_id INTEGER,
+            title TEXT,
+            message TEXT,
+            type TEXT,
+            is_read BOOLEAN DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            FOREIGN KEY (subject_id) REFERENCES subjects(id)
+            
+        )
+        '''
+    )
+ 
     conn.commit()
     conn.close()
     print(" Database initialized successfully with updated schema!")

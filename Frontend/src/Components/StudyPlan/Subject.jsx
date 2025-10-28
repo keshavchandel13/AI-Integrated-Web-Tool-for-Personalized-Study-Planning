@@ -8,6 +8,7 @@ import { generatePlanforsubject, getstudyplan } from "../../Api/StudyPlan";
 export default function Subject({ userId }) {
   const [subjects, setSubjects] = useState([]);
   const [plans, setPlans] = useState({});
+  console.log(plans)
 
   const getStudyPlan = async () => {
     try {
