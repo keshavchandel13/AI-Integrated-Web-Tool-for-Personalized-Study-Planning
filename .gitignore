@@ -1,4 +1,4 @@
-# Byte-compiled / optimized / DLL files
+
 __pycache__/
 *.py[cod]
 *$py.class
@@ -8,7 +8,7 @@ __pycache__/
 env/
 venv/
 
-# SQLite database (if you don't want to track dev DB)
+# SQLite database 
 database.db
 
 # IDE / Editor configs
@@ -18,6 +18,6 @@ database.db
 # Logs
 *.log
 
-# Flask instance folder (if you use one)
+# Flask instance folder 
 instance/
 .env
