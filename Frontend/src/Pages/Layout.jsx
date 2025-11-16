@@ -5,13 +5,13 @@ import Topbar from '../Components/common/Topbar';
 
 export default function Layout() {
   return (
-    <div style={{ display: 'flex' }}>
+    <div className="flex min-h-screen bg-white dark:bg-gray-900">
       <Sidebar />
-      <div style={{ flex: 1 }}>
-        {/* Topbar */}
+
+      <div className="flex-1 flex flex-col">
         <Topbar />
-        {/* Routed content */}
-        <div style={{ padding: '' }}>
+
+        <div className="p-4 text-black dark:text-gray-200">
           <Outlet />
         </div>
       </div>

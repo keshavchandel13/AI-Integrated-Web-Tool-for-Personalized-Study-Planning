@@ -13,7 +13,6 @@ export default function Sidebar() {
     { label: "Syllabus", icon: <FaBook />, link: "/syllabus" },
     { label: "Study Plan", icon: <GrPlan />, link: "/studyplan" },
     { label: "Progress", icon: <GiProgression />, link: "/progress" },
-    // { label: "Quizes", icon: <LuBrain />, link: "/quizes" },
   ];
 
   const navigate = useNavigate();
@@ -25,28 +24,47 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="bg-gradient-to-b from-purple-50 to-blue-50 min-h-screen p-5 w-60">
+    <div
+      className="
+      min-h-screen w-60 p-5 transition
+ 
+      bg-gradient-to-b from-purple-50 to-blue-50
+      dark:bg-gradient-to-b dark:from-gray-900 dark:to-gray-950
+      text-black dark:text-gray-200
+    "
+    >
       {/* Header */}
       <div className="flex items-center p-2">
-        <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-blue-500 rounded-lg flex items-center justify-center">
+        <div
+          className="
+          w-8 h-8 rounded-lg flex items-center justify-center
+          bg-gradient-to-br from-purple-400 to-blue-500
+          dark:from-purple-600 dark:to-blue-700
+        "
+        >
           <LuBrain className="text-white" />
         </div>
-        <h1 className="text-2xl font-bold text-purple-700 ml-2">EduPilot</h1>
+        <h1 className="text-2xl font-bold ml-2 text-purple-700 dark:text-purple-300">
+          EduPilot
+        </h1>
       </div>
 
       {/* Routes */}
-      <div className="flex gap-6 flex-col text-black mt-12">
+      <div className="flex flex-col gap-6 mt-12">
         {options.map((op) => {
           const isActive = location.pathname === op.link;
+
           return (
             <Link
               to={op.link}
               key={op.label}
-              className={`flex items-center text-lg px-3 py-2 rounded-lg transition ${
-                isActive
-                  ? "bg-purple-200 text-purple-900 font-semibold"
-                  : "text-purple-700 hover:bg-purple-100"
-              }`}
+              className={`flex items-center text-lg px-3 py-2 rounded-lg transition
+                ${
+                  isActive
+                    ? "bg-purple-200 dark:bg-purple-700 text-purple-900 dark:text-white font-semibold"
+                    : "text-purple-700 dark:text-gray-300 hover:bg-purple-100 dark:hover:bg-gray-800"
+                }
+              `}
             >
               {op.icon}
               <p className="ml-2">{op.label}</p>
@@ -55,12 +73,16 @@ export default function Sidebar() {
         })}
       </div>
 
-      <hr className="opacity-25 mt-12" />
+      <hr className="opacity-25 mt-12 dark:border-gray-700" />
 
       {/* Logout */}
       <button
         onClick={logout}
-        className="flex items-center gap-2 mt-6 text-purple-600 hover:text-purple-800 transition"
+        className="
+          flex items-center gap-2 mt-6 transition
+          text-purple-600 dark:text-gray-300
+          hover:text-purple-800 dark:hover:text-white
+        "
       >
         <IoMdExit /> Log out
       </button>

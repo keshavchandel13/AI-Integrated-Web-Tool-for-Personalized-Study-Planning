@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { FiBell, FiMessageCircle } from "react-icons/fi";
 import Notifications from "../notification/Notification";
+import { Moon } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Topbar() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -11,12 +13,15 @@ export default function Topbar() {
   };
 
   return (
-    <header className="h-16 bg-white/80 backdrop-blur-sm border-b border-purple-100 flex items-center justify-between px-6 relative">
+    <header className="h-16 bg-white/80 dark:bg-gradient-to-b dark:from-gray-900 dark:to-gray-950 backdrop-blur-sm border-b border-purple-100 flex items-center justify-between px-6 relative">
       {/* Left side (Search bar placeholder) */}
       <div className="flex-1 max-w-md"></div>
 
       {/* Right Side Actions */}
       <div className="flex items-center space-x-4 relative">
+        {/* dark theme */}
+        <ThemeToggle />
+
         {/* Notifications */}
         <div className="relative">
           <button
@@ -46,7 +51,7 @@ export default function Topbar() {
             <p className="text-purple-500 text-sm">Computer Science</p>
           </div>
           <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-purple-200">
-            <img src="/" alt="profile" className="w-full h-full object-cover" />
+            <img src="https://picsum.photos/seed/picsum/200/300" alt="profile" className="w-full h-full object-cover" />
           </div>
         </div>
       </div>

@@ -1,71 +1,91 @@
-import React, { useState } from 'react'
-import { login } from '../../Api/Auth'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from "react";
+import { login } from "../../Api/Auth";
+import { useNavigate } from "react-router-dom";
+import { LockKeyhole, Mail } from "lucide-react";
 
-export default function Auth({ setLogin }) {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const navigate = useNavigate()
-  // Login submit-->
+export default function Login({ setLogin }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
   const submitLogin = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    setLoading(true);
+
     try {
-      const res = await login({ email, password })
+      const res = await login({ email, password });
       if (res.user) {
-        localStorage.setItem("user", JSON.stringify(res.user))
-        navigate('/home')
+        localStorage.setItem("user", JSON.stringify(res.user));
+        navigate("/home");
       }
     } catch (err) {
-      console.error("Error in Login: ", err)
-      alert("Login failed. Please check your credentials.")
+      alert("Invalid credentials");
+    } finally {
+      setLoading(false);
     }
-  }
-  // Form change -->
-  const formChange = (e) => {
-    const { name, value } = e.target
-    if (name === 'email') setEmail(value)
-    else if (name === 'password') setPassword(value)
-  }
+  };
 
   return (
-    <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg border border-gray-200 mx-auto">
-      <h1 className="text-center text-3xl font-bold mb-6">Login</h1>
-      <form onSubmit={submitLogin} className="flex flex-col gap-4">
+    <div>
+      <h1 className="text-3xl font-semibold text-center  mb-2">Welcome Back</h1>
+      <p className="text-center text-gray-500 mb-8">Login to your account</p>
+
+      <form onSubmit={submitLogin} className="space-y-6">
         <div>
-          <label className="block mb-1 font-medium">Email:</label>
-          <input
-            placeholder="Enter your email"
-            onChange={formChange}
-            type="email"
-            value={email}
-            name="email"
-            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+          <label className="block mb-1 bold  font-medium">Email</label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              < Mail className="text-indigo-400 " />
+            </div>
+            <input
+              type="email"
+              name="email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              required
+              className="block w-full rounded-xl border-0 bg-gray-700/50 py-3 pl-14 pr-4 text-white placeholder-gray-400 shadow-lg ring-1 ring-inset ring-transparent focus:ring-2 focus:ring-inset focus:ring-indigo-500 transition duration-200 ease-in-out sm:text-sm sm:leading-6"
+              placeholder="john@example.com"
+            />
+          </div>
         </div>
+
         <div>
-          <label className="block mb-1 font-medium">Password:</label>
-          <input
-            placeholder="Enter your password"
-            onChange={formChange}
-            type="password"
-            value={password}
-            name="password"
-            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+          <label className="block mb-1 bold font-medium">Password</label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <LockKeyhole className="text-indigo-400" />
+            </div>
+            <input
+              type="password"
+              name="password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              required
+              className="block w-full rounded-xl border-0 bg-gray-700/50 py-3 pl-14 pr-4 text-white placeholder-gray-400 shadow-lg ring-1 ring-inset ring-transparent focus:ring-2 focus:ring-inset focus:ring-indigo-500 transition duration-200 ease-in-out sm:text-sm sm:leading-6"
+              placeholder="••••••••"
+            />
+          </div>
         </div>
+
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600 transition-colors"
+          disabled={loading}
+          className="w-full py-3 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 active:scale-[.98] transition disabled:bg-blue-400"
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
-      <button
-        onClick={setLogin}
-        className="mt-4 w-full bg-gray-200 text-gray-800 font-semibold py-2 rounded hover:bg-gray-300 transition-colors"
-      >
-        Signup
-      </button>
+
+      <p className="mt-6 text-white-600 text-center text-sm">
+        Don't have an account?
+        <button
+          onClick={setLogin}
+          className="ml-1 text-blue-600 hover:underline font-medium"
+        >
+          Sign up
+        </button>
+      </p>
     </div>
-  )
+  );
 }

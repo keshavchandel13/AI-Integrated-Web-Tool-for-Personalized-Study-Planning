@@ -8,7 +8,10 @@ function App() {
 
   return (
     <>
+    <div class="">
+
         <AppRoutes/>
+    </div>
     </>
   )
 }
