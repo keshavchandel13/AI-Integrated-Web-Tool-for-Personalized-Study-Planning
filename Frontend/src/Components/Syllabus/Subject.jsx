@@ -36,15 +36,20 @@ export default function Subject({ userId }) {
     }, []);
 
     return (
-        <div className="bg-gradient-to-br from-white to-purple-50 border border-purple-200 rounded-xl shadow-md p-6 mx-auto">
+        <div className="
+            bg-gray-900 
+            text-gray-100
+            border border-gray-700
+            rounded-xl shadow-lg p-6 mx-auto
+        ">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-purple-900 flex items-center text-xl font-semibold">
+                <h2 className="flex items-center text-xl font-semibold text-purple-300">
                     <FiBookOpen className="w-6 h-6 mr-2" />
                     Your Subjects
                 </h2>
                 <div className="text-right">
-                    <p className="text-purple-600 font-medium">
+                    <p className="text-purple-400 font-medium">
                         {date.toLocaleDateString("en-GB", {
                             day: "numeric",
                             month: "long",
@@ -52,7 +57,13 @@ export default function Subject({ userId }) {
                         })}
                     </p>
                     <button
-                        className="text-white bg-purple-600 hover:bg-purple-700 px-3 py-1 mt-2 rounded shadow-sm transition"
+                        className="
+                            text-white 
+                            bg-purple-700 
+                            hover:bg-purple-800 
+                            px-3 py-1 mt-2 rounded 
+                            shadow-sm transition
+                        "
                         onClick={() => setWindowOpen(true)}
                     >
                         Add Subject
@@ -60,7 +71,7 @@ export default function Subject({ userId }) {
                 </div>
             </div>
 
-            {/* Conditional Rendering */}
+            {/* Body */}
             {windowOpen ? (
                 <SubjectForm
                     onCancel={() => setWindowOpen(false)}

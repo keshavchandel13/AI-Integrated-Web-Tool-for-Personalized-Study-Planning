@@ -19,10 +19,10 @@ export default function SubjectForm({ onSave, onCancel }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4 border-t pt-5">
+        <form onSubmit={handleSubmit} className="space-y-4 border-t border-gray-700 pt-5">
             {["title", "subject_name", "start_date", "end_date"].map((field) => (
                 <div key={field}>
-                    <label className="block text-gray-700 font-medium mb-1 capitalize">
+                    <label className="block text-gray-300 font-medium mb-1 capitalize">
                         {field.replace("_", " ")}
                     </label>
                     <input
@@ -37,7 +37,13 @@ export default function SubjectForm({ onSave, onCancel }) {
                         name={field}
                         value={form[field]}
                         onChange={handleChange}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
+                        className="
+                            w-full rounded-lg px-3 py-2 
+                            bg-gray-800 text-gray-100
+                            border border-gray-600
+                            focus:outline-none focus:ring-2 focus:ring-purple-500
+                            transition
+                        "
                         required
                     />
                 </div>
@@ -46,13 +52,23 @@ export default function SubjectForm({ onSave, onCancel }) {
             <div className="flex justify-end space-x-3">
                 <button
                     type="submit"
-                    className="px-4 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition shadow"
+                    className="
+                        px-4 py-2 rounded-lg 
+                        bg-purple-700 text-white 
+                        hover:bg-purple-800 
+                        transition shadow
+                    "
                 >
                     Save
                 </button>
                 <button
                     type="button"
-                    className="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400 transition"
+                    className="
+                        px-4 py-2 rounded-lg 
+                        bg-gray-700 text-gray-200
+                        hover:bg-gray-600 
+                        transition
+                    "
                     onClick={onCancel}
                 >
                     Cancel
