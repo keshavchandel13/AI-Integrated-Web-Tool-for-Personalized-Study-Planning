@@ -1,8 +1,8 @@
 /* src/components/MentorBubble.css */
 .mentor-bubble-wrapper {
   position: fixed;
-  right: 310px; /* avatar width + small gap; adjust if avatar size changes */
-  bottom: 160px; /* bubble sits above avatar */
+  right: 103px; /* avatar width + small gap; adjust if avatar size changes */
+  bottom: 209px; /* bubble sits above avatar */
   z-index: 10000;
   pointer-events: auto;
   display: flex;
