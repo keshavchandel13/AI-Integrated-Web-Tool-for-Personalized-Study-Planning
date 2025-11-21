@@ -80,13 +80,13 @@ export default function Progress() {
           return (
             <div
               key={item.id}
-              className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition overflow-hidden mb-6"
+              className="bg-white border dark:bg-gray-700 border-gray-200 dark:border-green-300 rounded-2xl shadow-sm hover:shadow-md transition overflow-hidden mb-6"
             >
               <div className="p-6 flex justify-between items-center">
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <FiBookOpen className="text-purple-700 text-xl" />
-                    <p className="text-purple-900 font-semibold text-lg">
+                    <p className="text-purple-500 font-semibold text-lg">
                       {item.title}
                     </p>
                   </div>

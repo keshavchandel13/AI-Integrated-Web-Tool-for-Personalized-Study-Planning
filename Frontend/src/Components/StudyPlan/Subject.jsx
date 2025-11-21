@@ -54,7 +54,7 @@ export default function Subject({ userId }) {
         subjects.map((item) => (
           <div
             key={item.id}
-            className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition overflow-hidden"
+            className="bg-white border dark:bg-gray-900 border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition overflow-hidden"
           >
             {/* Top Section: Subject Info */}
             <div className="p-6 flex justify-between items-start">
@@ -103,7 +103,7 @@ export default function Subject({ userId }) {
 
             {/* Bottom Section: Study Plan */}
             {item.is_plan_generated === 1 && (
-              <div className="bg-gray-50 border-t border-gray-200 p-5">
+              <div className="bg-gray-50 dark:bg-gray-800 border-t border-gray-200 p-5">
                 {plans[item.id] ? (
                   <SubjectPlan plan={plans[item.id]} userId={userId} subjectId={item.id} />
                 ) : (

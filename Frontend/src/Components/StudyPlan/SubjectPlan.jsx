@@ -58,7 +58,7 @@ export default function SubjectPlan({ plan, userId, subjectId }) {
   }
 
   return (
-    <div className="mt-4 border border-gray-200 rounded-lg shadow-sm p-4 bg-white">
+    <div className="mt-4 border dark:bg-gray-900 border-gray-200 rounded-lg shadow-sm p-4 bg-white">
       {/*  Subject Progress Header */}
       <div className="mb-4">
         <div className="flex justify-between items-center">
@@ -78,7 +78,7 @@ export default function SubjectPlan({ plan, userId, subjectId }) {
       {/*  Study Plan Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm text-left border-collapse">
-          <thead className="bg-purple-100 text-purple-800">
+          <thead className="bg-purple-100 dark:bg-gray-900 text-purple-800">
             <tr>
               <th className="px-3 py-2 border">Day</th>
               <th className="px-3 py-2 border">Date</th>
@@ -93,7 +93,7 @@ export default function SubjectPlan({ plan, userId, subjectId }) {
               const isCompleted = completedTopics.includes(item.id) || item.completed === 1;
 
               return (
-                <tr key={item.id} className="hover:bg-gray-50">
+                <tr key={item.id} className="hover:bg-green-400">
                   <td className="px-3 py-2 border text-center">{item.day}</td>
                   <td className="px-3 py-2 border">{item.date_assigned}</td>
                   <td className="px-3 py-2 border text-center">{item.topic}</td>

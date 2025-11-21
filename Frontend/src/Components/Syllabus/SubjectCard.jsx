@@ -7,11 +7,11 @@ export default function SubjectCard({ subject }) {
     const [showList, setShowList] = useState(false);
 
     return (
-        <div className="p-4 bg-gray-900 rounded-xl border border-gray-700 shadow hover:shadow-lg transition mb-4">
+        <div className="p-4 dark:bg-gray-900 rounded-xl border border-gray-700 shadow hover:shadow-lg transition mb-4">
             {/* Card Content */}
             <div className="flex justify-between items-center">
                 <div>
-                    <p className="text-purple-300 font-semibold text-lg">
+                    <p className="text-purple-600 font-semibold text-lg">
                         {subject.title}
                     </p>
                     <p className="text-purple-400 text-sm">

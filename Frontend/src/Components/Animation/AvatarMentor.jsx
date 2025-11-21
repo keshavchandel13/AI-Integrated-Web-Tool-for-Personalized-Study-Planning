@@ -7,7 +7,7 @@ import { useGLTF } from "@react-three/drei";
 useGLTF.preload("/assets/keshav-avatar.glb");
 
 function AvatarModel({
-  url = "/assets/keshav-avatar.glb",
+  url = "/keshav-avatar.glb",
   onWaveDone,
   enableInteraction = true,
 }) {
@@ -147,7 +147,7 @@ function AvatarModel({
 }
 
 export default function AvatarMentor({
-  size = 280, // medium default
+  size = 137, // medium default
   username = "User",
   tasks = [],
   enableInteraction = true,
@@ -157,7 +157,7 @@ export default function AvatarMentor({
     right: 20,
     bottom: 20,
     width: `${size}px`,
-    height: `${Math.round(size * 1.12)}px`,
+    height: `${137}px`,
     zIndex: 9999,
     pointerEvents: "auto",
     touchAction: "none",

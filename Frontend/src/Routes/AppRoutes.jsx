@@ -8,6 +8,7 @@ import StudyPlan from '../Pages/StudyPlan'
 import Progress from '../Pages/Progress'
 import Quizes from '../Pages/Quizes'
 import PrefrenceForm from '../Components/StudyPlan/PrefrenceForm'
+import MentorChat from '../Components/mentorchat/MentorChat'
 export default function AppRoutes() {
     return (
         <div>
@@ -20,6 +21,7 @@ export default function AppRoutes() {
                     <Route path="/progress" element={<Progress />} />
                     <Route path="/quizes" element={<Quizes />} />
                     <Route path="/generatePlan" element={<PrefrenceForm />} />
+                    <Route path="/mentor-chat" element={<MentorChat />} />
 
                 </Route>
             </Routes>

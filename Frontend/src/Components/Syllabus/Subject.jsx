@@ -37,19 +37,19 @@ export default function Subject({ userId }) {
 
     return (
         <div className="
-            bg-gray-900 
+            dark:bg-gray-900 
             text-gray-100
             border border-gray-700
             rounded-xl shadow-lg p-6 mx-auto
         ">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
-                <h2 className="flex items-center text-xl font-semibold text-purple-300">
+                <h2 className="flex items-center text-xl font-semibold text-purple-500">
                     <FiBookOpen className="w-6 h-6 mr-2" />
                     Your Subjects
                 </h2>
                 <div className="text-right">
-                    <p className="text-purple-400 font-medium">
+                    <p className="text-purple-500 font-medium">
                         {date.toLocaleDateString("en-GB", {
                             day: "numeric",
                             month: "long",
