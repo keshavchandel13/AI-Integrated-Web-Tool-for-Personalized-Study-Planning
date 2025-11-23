@@ -6,13 +6,14 @@ import { GrPlan } from "react-icons/gr";
 import { LuBrain } from "react-icons/lu";
 import { GiProgression } from "react-icons/gi";
 import { IoMdExit } from "react-icons/io";
-
+import { MessageCircleQuestionMark } from 'lucide-react';
 export default function Sidebar() {
   const options = [
     { label: "Home", icon: <CiHome />, link: "/home" },
     { label: "Syllabus", icon: <FaBook />, link: "/syllabus" },
     { label: "Study Plan", icon: <GrPlan />, link: "/studyplan" },
     { label: "Progress", icon: <GiProgression />, link: "/progress" },
+    {label: "Doubts", icon: <MessageCircleQuestionMark />, link:"/aibot"},
   ];
 
   const navigate = useNavigate();

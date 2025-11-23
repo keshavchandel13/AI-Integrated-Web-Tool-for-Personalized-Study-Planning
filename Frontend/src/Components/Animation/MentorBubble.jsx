@@ -8,7 +8,7 @@ export default function MentorBubble({ username = "Keshav", tasks = [], visible 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const id = setInterval(() => setIndex((p) => (p === 0 ? 1 : 0)), 10000); // 10s
+    const id = setInterval(() => setIndex((p) => (p === 0 ? 1 : 0)), 3000); 
     return () => clearInterval(id);
   }, []);
 
@@ -33,7 +33,7 @@ export default function MentorBubble({ username = "Keshav", tasks = [], visible 
           </ul>
         </div>
       ) : (
-        <div className="mentor-bubble mentor-bubble-cta" onClick={() => navigate("/mentor-chat")}>
+        <div className="mentor-bubble mentor-bubble-cta" onClick={() => navigate("/aibot")}>
           <div className="cta-text">Have questions?</div>
           <div className="cta-action">Click here →</div>
         </div>
