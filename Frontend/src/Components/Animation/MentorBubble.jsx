@@ -1,10 +1,9 @@
-// src/components/MentorBubble.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./MentorBubble.css";
 
-export default function MentorBubble({ username = "Keshav", tasks = [], visible = true }) {
-  const [index, setIndex] = useState(0); // 0 -> tasks, 1 -> CTA
+export default function MentorBubble({ username, tasks = [], visible = true }) {
+  const [index, setIndex] = useState(0); 
   const navigate = useNavigate();
 
   useEffect(() => {

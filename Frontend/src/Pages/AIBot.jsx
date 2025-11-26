@@ -1,8 +1,10 @@
 import React, {useState} from "react";
 import ChatInput from "../Components/mentorchat/ChatInput";
 import MessageBubble from "../Components/mentorchat/MessageBubble";
-
+import { geminires } from "../Api/GenAi";
 export default function AIBot() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const username = user.username
     const [query, setQuery] = useState("");
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -27,7 +29,7 @@ export default function AIBot() {
    <div className="flex flex-col h-[calc(100vh-102px)]">
   {/* Header */}
   <div>
-    <h1 className="text-center text-3xl">Tinku Mentor</h1>
+    <h1 className="text-center text-3xl"> Mentor</h1>
   </div>
 
   {/* Chat messages */}
@@ -40,7 +42,7 @@ export default function AIBot() {
       :
       (
 
-        <div><MessageBubble messages={messages}/> </div>
+        <div><MessageBubble messages={messages} username={username}/> </div>
       )
 
     }
@@ -49,7 +51,7 @@ export default function AIBot() {
 
   {/* Chat input*/}
   <div className="p-2 flex justify-center">
-    <ChatInput setQuerychange={setQuerychange} getResponse={getResponse} />
+    <ChatInput query={query} setQuerychange={setQuerychange} getResponse={getResponse} />
   </div>
 </div>
 

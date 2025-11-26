@@ -1,4 +1,3 @@
-// src/components/AvatarMentor.jsx
 import React, { useRef, useEffect, useState, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
@@ -15,7 +14,7 @@ function AvatarModel({
   const { scene } = useGLTF(url);
 
   // animation / interaction phases
-  const [phase, setPhase] = useState("init"); // init -> wave -> idle
+  const [phase, setPhase] = useState("init");
   const [hovered, setHovered] = useState(false);
   const [spinOnClick, setSpinOnClick] = useState(false);
 
@@ -23,12 +22,10 @@ function AvatarModel({
   const [dragging, setDragging] = useState(false);
   const prevPos = useRef({ x: 0, y: 0 });
 
-  // velocities for inertia (only horizontal now)
-  const rotVelocity = useRef(0); // horizontal spin velocity (y-axis)
 
-  // Base vertical position & scale for "above abdomen" framing
-  // You can tweak these two numbers if needed
-  const BASE_Y = -2.9;   // more negative = moves avatar down (shows less lower body)
+  const rotVelocity = useRef(0); 
+
+  const BASE_Y = -2.9;   // more negative, moves avatar down 
   const BASE_SCALE = 2.0; // bigger = closer / tighter crop
 
   // start with a wave
@@ -42,7 +39,6 @@ function AvatarModel({
     if (phase === "idle" && onWaveDone) onWaveDone();
   }, [phase, onWaveDone]);
 
-  // core frame loop - animations + inertia
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
     if (!group.current) return;
@@ -51,14 +47,12 @@ function AvatarModel({
     group.current.position.y = BASE_Y;
     group.current.scale.set(BASE_SCALE, BASE_SCALE, BASE_SCALE);
 
-    // Wave animation (rotation only, no bobbing)
+
     if (phase === "wave") {
       group.current.rotation.y = Math.sin(t * 12) * 0.25;
       group.current.rotation.x = 0; // ensure no tilt
-      return; // skip idle/inertia while waving
+      return; 
     }
-
-    // Idle: tiny auto-rotate only if untouched
     if (
       phase === "idle" &&
       !hovered &&
@@ -71,7 +65,7 @@ function AvatarModel({
 
     // apply spinOnClick constant rotation
     if (spinOnClick) {
-      rotVelocity.current += delta * 1.6; // increase horizontal velocity
+      rotVelocity.current += delta * 1.6;
     }
 
     // apply horizontal rotation velocity with damping
@@ -81,15 +75,15 @@ function AvatarModel({
       if (Math.abs(rotVelocity.current) < 1e-4) rotVelocity.current = 0;
     }
 
-    // hard lock X tilt so user can never reveal more body by dragging
+
     group.current.rotation.x = 0;
   });
 
-  // pointer handlers (attached to wrapper group)
+
   return (
     <group
       ref={group}
-      position={[0, BASE_Y, 0]} // initial position (also locked each frame)
+      position={[0, BASE_Y, 0]} 
       rotation={[0, 0, 0]}
       onPointerOver={(e) => {
         if (!enableInteraction) return;
@@ -122,10 +116,7 @@ function AvatarModel({
         e.stopPropagation();
         const dx = e.clientX - prevPos.current.x;
 
-        // only rotate horizontally
         group.current.rotation.y += dx * 0.008;
-
-        // inertia for spin
         rotVelocity.current = dx * 0.04;
 
         prevPos.current = { x: e.clientX, y: e.clientY };
@@ -147,7 +138,7 @@ function AvatarModel({
 }
 
 export default function AvatarMentor({
-  size = 137, // medium default
+  size = 137, 
   username = "User",
   tasks = [],
   enableInteraction = true,
@@ -183,8 +174,8 @@ export default function AvatarMentor({
         <Canvas
           style={canvasStyle}
           camera={{
-            position: [0, 1.7, 4.2], // closer + slight top eye line
-            fov: 24,                 // tighter portrait framing
+            position: [0, 1.7, 4.2], 
+            fov: 24,                
           }}
         >
           <ambientLight intensity={0.8} />
@@ -195,9 +186,7 @@ export default function AvatarMentor({
               enableInteraction={enableInteraction}
             />
           </Suspense>
-          {/* For debugging only:
-             <OrbitControls enableZoom={false} enablePan={false} /> 
-          */}
+
         </Canvas>
       </div>
     </div>

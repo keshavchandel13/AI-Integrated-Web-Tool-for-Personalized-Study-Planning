@@ -11,8 +11,6 @@ export default function HomePage() {
   // username
   const username = user?.name || user?.username || "User";
 
-  // today’s tasks from TodayTopics API OR static fallback
-  // If TodayTopics already fetches tasks internally, use a placeholder here:
   const todayTasks = [
     "Complete 2 DSA problems",
     "1 hour MERN stack",

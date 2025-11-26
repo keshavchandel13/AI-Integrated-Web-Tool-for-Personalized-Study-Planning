@@ -3,7 +3,6 @@ import React, { Suspense, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Html, useGLTF } from "@react-three/drei";
 
-// ---- Simple rotating object (quick, no external model) ----
 function RotatingBox() {
   const ref = useRef();
   useFrame((state, delta) => {
@@ -18,17 +17,10 @@ function RotatingBox() {
   );
 }
 
-/* ----- Model loader example (use when you have model.glb in /public/assets) -----
-function Model({ url = "/assets/your-avatar.glb", scale = 1 }) {
-  const { scene } = useGLTF(url);
-  return <primitive object={scene} scale={scale} />;
-}
-useGLTF.preload("/assets/your-avatar.glb");
----------------------------------------------------------------------------------*/
 
 export default function ThreeCanvas({
-  height = 420,          // px or "100vh" (string) for full screen
-  background = false,    // set true to render as page background (absolute)
+  height = 420,          
+  background = false,   
 }) {
   const style = background
     ? {
@@ -45,15 +37,13 @@ export default function ThreeCanvas({
         <ambientLight intensity={0.8} />
         <directionalLight position={[5, 5, 5]} intensity={0.8} />
         <Suspense fallback={<Html center>Loading...</Html>}>
-          {/* Quick: rotating box */}
+   
           <RotatingBox />
 
-          {/* To use your GLB avatar, replace RotatingBox with:
-              <Model url="/assets/your-avatar.glb" scale={1.2} />
-          */}
+   
         </Suspense>
 
-        {/* Optional user controls while developing (remove pointerEvents style if background true) */}
+  
         <OrbitControls enableZoom={false} />
       </Canvas>
     </div>

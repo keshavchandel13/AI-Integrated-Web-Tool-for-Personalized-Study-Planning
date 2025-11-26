@@ -14,6 +14,7 @@ from Routes.studyPlanRoute import studyplan_blueprint
 from Routes.quizRoute import quiz_bp
 from Routes.progressRoute import progress_bp
 from Routes.notificationRoute import notifications_bp
+from Routes.GeminiRoute import mentor_bp
 
 # Import database utilities
 from config.db import get_db, close_connection
@@ -45,6 +46,8 @@ app.register_blueprint(studyplan_blueprint, url_prefix='/api/studyplan')
 app.register_blueprint(quiz_bp, url_prefix='/api')
 app.register_blueprint(progress_bp, url_prefix='/api/progress')
 app.register_blueprint(notifications_bp, url_prefix='/api/notifications')
+app.register_blueprint(mentor_bp, url_prefix='/api/gemini')
+
 
 # Database teardown
 app.teardown_appcontext(close_connection)
