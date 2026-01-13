@@ -23,14 +23,14 @@ export default function HomePage() {
       <TodayTopics userId={user.id} />
 
       {/* Avatar (bottom-right) */}
-      <AvatarMentor size={180} username={username} />
+      {/* <AvatarMentor size={180} username={username} /> */}
 
       {/* Bubble above avatar */}
-      <MentorBubble  
+      {/* <MentorBubble  
         username={username}
         tasks={todayTasks}
         visible={true}
-      />
+      /> */}
       
     </div>
   );

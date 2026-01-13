@@ -10,6 +10,7 @@ import Quizes from '../Pages/Quizes'
 import PrefrenceForm from '../Components/StudyPlan/PrefrenceForm'
 import MentorChat from '../Components/mentorchat/MentorChat'
 import AIBot from '../Pages/AIBot'
+import Profile from '../Pages/Profile'
 export default function AppRoutes() {
     return (
         <div>
@@ -23,6 +24,7 @@ export default function AppRoutes() {
                     <Route path="/quizes" element={<Quizes />} />
                     <Route path="/generatePlan" element={<PrefrenceForm />} />
                     <Route path='/aibot' element={<AIBot/>}/>
+                    <Route path='/profile' element={<Profile/>}/>
 
 
                 </Route>

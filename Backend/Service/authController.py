@@ -45,7 +45,8 @@ def login_controller():
         user_data = {
         "id": user["id"],
         "username": user["username"],
-        "email": user["email"]
+        "email": user["email"],
+        "branch": user["branch"],
         }
         return jsonify({"message": "Login successful", 'user':user_data}), 200
     
