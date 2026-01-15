@@ -1,7 +1,8 @@
-from flask import request, jsonify
+from flask import request, jsonify, current_app
 from config.db import get_db
 from extension import bcrypt
- 
+import jwt
+from datetime import datetime, timezone, timedelta
 def signup_controller():
     cnt =  get_db()
     data = request.json
@@ -38,16 +39,25 @@ def login_controller():
         return jsonify({"message": "Invalid credentials"}), 401
     
     
-    stored_hash = user['password_hash'] if 'password_hash' in user.keys() else user[3]
-    
-    # Verify password
-    if bcrypt.check_password_hash(stored_hash, password):
-        user_data = {
+    stored_hash = user['password_hash'] 
+
+        # Verify password
+    if not bcrypt.check_password_hash(stored_hash, password):
+            return jsonify({"message": "Invalid credentials"}), 401
+    # jwt encoding
+    token = jwt.encode({
+        'sub':user["id"],
+        'iat': datetime.now(timezone.utc),
+        'exp': datetime.now(timezone.utc) + timedelta(hours=72)
+    },
+        current_app.config['JWT_SECRET_KEY'],
+        algorithm="HS256"
+    )
+    user_data = {
         "id": user["id"],
         "username": user["username"],
         "email": user["email"],
         "branch": user["branch"],
+        "bearer": token
         }
-        return jsonify({"message": "Login successful", 'user':user_data}), 200
-    
-    return jsonify({"message": "Invalid credentials"}), 401
+    return jsonify({"message": "Login successful", 'user':user_data}), 200
