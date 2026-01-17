@@ -7,6 +7,7 @@ import MentorBubble from "../Components/Animation/MentorBubble";
 
 export default function HomePage() {
   const user = JSON.parse(localStorage.getItem("user"));
+  console.log(user)
 
   // username
   const username = user?.name || user?.username || "User";

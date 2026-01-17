@@ -24,7 +24,7 @@ def signup_controller():
     (name, email, hashed_password)
     )
     cnt.commit()
-    return jsonify({'message':"Signup Completed"}), 200
+    return jsonify({'message':"Signup Completed"}), 201
 
 
 def login_controller():
@@ -46,7 +46,7 @@ def login_controller():
             return jsonify({"message": "Invalid credentials"}), 401
     # jwt encoding
     token = jwt.encode({
-        'sub':user["id"],
+        'sub':str(user["id"]),
         'iat': datetime.now(timezone.utc),
         'exp': datetime.now(timezone.utc) + timedelta(hours=72)
     },
@@ -58,6 +58,6 @@ def login_controller():
         "username": user["username"],
         "email": user["email"],
         "branch": user["branch"],
-        "bearer": token
+        "access_token": token
         }
     return jsonify({"message": "Login successful", 'user':user_data}), 200

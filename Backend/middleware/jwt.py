@@ -26,7 +26,7 @@ def token_required(f):
         except jwt.InvalidTokenError:
             return jsonify({"message": "Invalid token"}), 401
 
-        g.user_id = payload["sub"]
+        g.user_id = int(payload["sub"])
 
         return f(*args, **kwargs)
 

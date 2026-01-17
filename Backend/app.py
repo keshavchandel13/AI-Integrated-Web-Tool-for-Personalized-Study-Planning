@@ -15,6 +15,7 @@ from Routes.quizRoute import quiz_bp
 from Routes.progressRoute import progress_bp
 from Routes.notificationRoute import notifications_bp
 # from Routes.GeminiRoute import mentor_bp
+from Routes.userRoute import user_bp
 
 # Import database utilities
 from config.db import get_db, close_connection
@@ -48,6 +49,8 @@ app.register_blueprint(quiz_bp, url_prefix='/api')
 app.register_blueprint(progress_bp, url_prefix='/api/progress')
 app.register_blueprint(notifications_bp, url_prefix='/api/notifications')
 # app.register_blueprint(mentor_bp, url_prefix='/api/gemini')
+app.register_blueprint(user_bp, url_prefix="/api/user")
+
 
 
 # Database teardown
