@@ -2,20 +2,25 @@ import React, { useState } from "react";
 import { login } from "../../Api/Auth";
 import { useNavigate } from "react-router-dom";
 import { LockKeyhole, Mail } from "lucide-react";
+import {AuthContext} from "../../context/authcontext"
+import { useContext } from "react";
 
 export default function Login({ setLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { loginContext } = useContext(AuthContext);
 
   const submitLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
+    
 
     try {
       const res = await login({ email, password });
       if (res.user) {
+        loginContext(res.user)
         localStorage.setItem("user", JSON.stringify(res.user));
         navigate("/home");
       }
