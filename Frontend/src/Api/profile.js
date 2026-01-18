@@ -1,11 +1,15 @@
 import axios from "axios";
-import { defaults } from "chart.js";
+
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
-export default async function fetchUserData(id) {
+export default async function fetchUserData(jwtid) {
     try{
-        const res = await axios.get(`${VITE_BACKEND_URL}/profile/${id}`)
+        const res = await axios.get(`${VITE_BACKEND_URL}/api/user/getuser`,{
+            headers:{
+                Authorization: `Bearer ${jwtid}`
+            }
+        })
         return res.data
     }
     catch(err){
