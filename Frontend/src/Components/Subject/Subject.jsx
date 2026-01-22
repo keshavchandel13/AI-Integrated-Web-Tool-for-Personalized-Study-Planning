@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { FiBookOpen } from "react-icons/fi";
 import { addSubject as addSubjectApi, getSubjects } from "../../Api/Subject";
 import { Link } from "react-router-dom";
-
+import { parseISO, format } from "date-fns";
+import { ToastContainer, toast } from "react-toastify";
+import Loader from "../common/Loader";
 export default function Subject({ userId }) {
   const date = new Date();
   const [subj, setSubj] = useState([]);
   const [windowOpen, setWindowOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
     title: "",
@@ -17,25 +20,31 @@ export default function Subject({ userId }) {
 
   const fetchSubject = async () => {
     try {
+      setLoading(true);
       const res = await getSubjects(userId);
       setSubj(res);
     } catch (err) {
-      console.log(err);
+      toast(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const addSubject = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const res = await addSubjectApi({ user_id: userId, ...form });
       if (res.message === "Subject added successfully") {
-        alert("Subject Added");
+        toast("Subject Added");
         setWindowOpen(false);
         fetchSubject();
         setForm({ title: "", subject_name: "", start_date: "", end_date: "" });
       }
     } catch (err) {
-      console.log(err);
+      toast(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,6 +67,7 @@ export default function Subject({ userId }) {
     rounded-xl shadow-md p-6 mx-auto
 "
       >
+        <ToastContainer />
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="flex items-center text-xl font-semibold text-purple-900 dark:text-purple-300">
@@ -106,8 +116,8 @@ export default function Subject({ userId }) {
                       field === "title"
                         ? "e.g., DS study plan..."
                         : field === "subject_name"
-                        ? "e.g., Data Science..."
-                        : ""
+                          ? "e.g., Data Science..."
+                          : ""
                     }
                     name={field}
                     value={form[field]}
@@ -124,7 +134,7 @@ export default function Subject({ userId }) {
                     required
                   />
                 </div>
-              )
+              ),
             )}
 
             <div className="flex justify-end space-x-3">
@@ -189,7 +199,8 @@ export default function Subject({ userId }) {
 
                   <div className="text-gray-500 dark:text-gray-300 text-sm text-right">
                     <p>
-                      {item.start_date} - {item.end_date}
+                      {format(parseISO(item.start_date), "dd-MM-yyyy")} -{" "}
+                      {format(parseISO(item.end_date), "dd-MM-yyyy")}
                     </p>
 
                     <div className="flex gap-2 mt-5">
