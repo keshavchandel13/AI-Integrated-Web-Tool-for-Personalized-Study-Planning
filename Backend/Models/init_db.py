@@ -31,6 +31,7 @@ def init_db():
             start_date TEXT,
             end_date TEXT,
             is_plan_generated BOOLEAN DEFAULT 0,
+            completed BOOLEAN DEFAULT 0,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY(user_id) REFERENCES users(id)
         )
@@ -132,6 +133,7 @@ def init_db():
         )
         '''
     )
+
  
     conn.commit()
     conn.close()

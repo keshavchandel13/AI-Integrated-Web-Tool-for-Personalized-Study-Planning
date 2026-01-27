@@ -6,7 +6,7 @@ export const login = async ({ email, password }) => {
             { email, password },
             {
                 headers: { 'Content-Type': 'application/json' },
-                withCredentials: true
+   
             });
         return res.data;
 
@@ -22,7 +22,7 @@ export const signup = async ({ name, email, password }) => {
             { name, email, password },
             {
                 headers: { 'Content-Type': 'application/json' },
-                withCredentials:true
+
             });
             return res.data;
 

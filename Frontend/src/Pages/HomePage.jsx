@@ -7,8 +7,6 @@ import MentorBubble from "../Components/Animation/MentorBubble";
 
 export default function HomePage() {
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user)
-
   // username
   const username = user?.name || user?.username || "User";
 
@@ -20,8 +18,8 @@ export default function HomePage() {
 
   return (
       <div>
-      <Subject userId={user.id} />
       <TodayTopics userId={user.id} />
+      <Subject userId={user.id} />
 
       {/* Avatar (bottom-right) */}
       {/* <AvatarMentor size={180} username={username} /> */}

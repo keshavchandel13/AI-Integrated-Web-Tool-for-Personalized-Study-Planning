@@ -4,13 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { LockKeyhole, Mail } from "lucide-react";
 import {AuthContext} from "../../context/authcontext"
 import { useContext } from "react";
+import { ToastContainer, toast } from 'react-toastify'
 
 export default function Login({ setLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { loginContext } = useContext(AuthContext);
+  const { logincontext } = useContext(AuthContext);
 
   const submitLogin = async (e) => {
     e.preventDefault();
@@ -19,13 +20,15 @@ export default function Login({ setLogin }) {
 
     try {
       const res = await login({ email, password });
+
       if (res.user) {
-        loginContext(res.user)
+        logincontext(res.user)
         localStorage.setItem("user", JSON.stringify(res.user));
         navigate("/home");
       }
     } catch (err) {
-      alert("Invalid credentials");
+      toast("Error in login")
+      toast(err);
     } finally {
       setLoading(false);
     }
@@ -33,6 +36,7 @@ export default function Login({ setLogin }) {
 
   return (
     <div>
+      <ToastContainer/>
       <h1 className="text-3xl font-semibold text-center  mb-2">Welcome Back</h1>
       <p className="text-center text-gray-500 mb-8">Login to your account</p>
 

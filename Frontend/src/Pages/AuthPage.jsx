@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Login from '../Components/Auth/Login'
 import Signup from '../Components/Auth/Signup'
-
+import { ToastContainer, toast } from 'react-toastify'
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true)
 

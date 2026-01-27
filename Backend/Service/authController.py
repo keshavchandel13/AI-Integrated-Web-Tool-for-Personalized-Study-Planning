@@ -35,7 +35,9 @@ def login_controller():
     
     # Find user
     user = cnt.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+    print(user["id"])
     if not user:
+
         return jsonify({"message": "Invalid credentials"}), 401
     
     
@@ -43,7 +45,9 @@ def login_controller():
 
         # Verify password
     if not bcrypt.check_password_hash(stored_hash, password):
+            print("Bhai crash ho gya")
             return jsonify({"message": "Invalid credentials"}), 401
+
     # jwt encoding
     token = jwt.encode({
         'sub':str(user["id"]),
