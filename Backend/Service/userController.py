@@ -1,6 +1,9 @@
-from flask import jsonify
+from flask import jsonify, request
 from config.db import get_db
-
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+config = cloudinary.config(secure=True)
 def getuser(userId):
     try:
         print(userId)
@@ -24,3 +27,39 @@ def getuser(userId):
     except Exception as e:
         print(e)
         return jsonify({"message": "Internal server error"}), 500
+
+def updateProfile(id):
+    try:
+        db = get_db()
+
+        name = request.form.get('name')
+        college = request.form.get('college')
+        bio = request.form.get('bio')
+        branch = request.form.get('branch')
+        avatar = request.files.get('avatar')
+
+        image_url = None
+        if avatar and avatar.mimetype.startswith("image/"):
+            response = cloudinary.uploader.upload(
+                avatar,
+                folder="avatars",
+                unique_filename=True
+            )
+            image_url = response["secure_url"]
+
+        db.execute(
+            '''
+            UPDATE users
+            SET username = ?, college = ?, bio = ?, branch = ?, avatar = ?
+            WHERE id = ?
+            ''',
+            (name, college, bio, branch, image_url, id)
+        )
+
+        db.commit()
+
+        return jsonify({"message": "User Detail Updated"}), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify({"message": "Error in updating profile"}), 500

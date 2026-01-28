@@ -16,6 +16,7 @@ def init_db():
             branch TEXT,
             bio TEXT,
             college TEXT,
+            avatar TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)

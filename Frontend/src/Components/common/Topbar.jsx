@@ -53,7 +53,7 @@ export default function Topbar() {
             <p className="text-purple-500 text-sm">{user?.branch}</p>
           </div>
           <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-purple-200">
-            <img src="https://picsum.photos/seed/picsum/200/300" alt="profile" className="w-full h-full object-cover" />
+            <img src={user.avatar} alt="profile" className="w-full h-full object-cover" />
           </div>
         </div>
         </Link>
