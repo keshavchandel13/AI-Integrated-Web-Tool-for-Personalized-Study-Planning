@@ -11,7 +11,6 @@ const TodayTopics = ({ userId }) => {
   const [loading, setLoading] = useState(true);
 
   const today = dayjs().format("YYYY-MM-DD");
-
   useEffect(() => {
     const fetchData = async () => {
       try {

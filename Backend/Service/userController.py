@@ -32,7 +32,7 @@ def updateProfile(id):
     try:
         db = get_db()
 
-        name = request.form.get('name')
+        name = request.form.get('username')
         college = request.form.get('college')
         bio = request.form.get('bio')
         branch = request.form.get('branch')

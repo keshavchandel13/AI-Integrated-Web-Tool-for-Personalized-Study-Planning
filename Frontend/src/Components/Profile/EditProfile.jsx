@@ -6,7 +6,7 @@ export default function ProfileEdit({ user, onCancel, onSave }) {
     college: user.college || "",
     branch: user.branch || "",
     aiPersona: user.aiPersona || "",
-    avatar: null, // IMPORTANT: file, not URL
+    avatar: null,
   });
 
   function handleChange(e) {
@@ -17,7 +17,7 @@ export default function ProfileEdit({ user, onCancel, onSave }) {
   function handleFileChange(e) {
     setForm((prev) => ({
       ...prev,
-      avatar: e.target.files[0], // actual File object
+      avatar: e.target.files[0], 
     }));
   }
 
@@ -30,7 +30,7 @@ export default function ProfileEdit({ user, onCancel, onSave }) {
       }
     });
 
-    onSave(formData); // backend MUST accept multipart/form-data
+    onSave(formData);
   }
 
   return (

@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 
 export default function ProfileView({ user, onEdit }) {
+  // console.log(user)
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900">
       <main className="p-8 max-w-7xl mx-auto">

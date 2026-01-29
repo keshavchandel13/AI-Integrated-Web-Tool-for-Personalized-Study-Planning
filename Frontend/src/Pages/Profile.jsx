@@ -9,7 +9,6 @@ export default function ProfileContainer() {
 
   const userobj = JSON.parse(localStorage.getItem("user"));
   const userId = userobj?.access_token;
-  console.log(userId)
 
   useEffect(() => {
     async function loadUser() {
