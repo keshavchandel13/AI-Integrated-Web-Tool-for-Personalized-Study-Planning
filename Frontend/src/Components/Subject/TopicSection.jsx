@@ -5,7 +5,6 @@ export default function TopicSection({
   title,
   topics,
   color,
-  is_plan_generated,
   showDate = false,
   showStatus = false,
   emptyText,

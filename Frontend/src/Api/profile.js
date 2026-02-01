@@ -1,11 +1,7 @@
-import axios from "axios";
-
-
-const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL
-
+import api from "./axios";
 export default async function fetchUserData(jwtid) {
     try{
-        const res = await axios.get(`${VITE_BACKEND_URL}/api/user/getuser`,{
+        const res = await api.get(`/user/getuser`,{
             headers:{
                 Authorization: `Bearer ${jwtid}`
             }
