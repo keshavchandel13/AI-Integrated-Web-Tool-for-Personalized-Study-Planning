@@ -126,13 +126,13 @@ def get_plan():
     finally:
         conn.close()
 
-def subjectpreference():
+def subjectpreference(userId):
     try:
         conn = get_db()
         cursor = conn.cursor()
         data = request.get_json()
         subjectId = data.get("subjectId")
-        userId = data.get("userId")
+        userId = userId
         days = data.get("totalDays")
         dailyHours = data.get("dailyHours")
         preferredTime = data.get("preferredTime")
@@ -154,12 +154,12 @@ def subjectpreference():
         conn.close()
 
 
-def update_topic():
+def update_topic(userId):
     conn = None
     cursor = None
     try:
         data = request.get_json()
-        required_fields = ["user_id", "subject_id", "topic_id"]
+        required_fields = [ "subject_id", "topic_id"]
         missing = [f for f in required_fields if f not in data]
 
         if missing:
@@ -169,7 +169,7 @@ def update_topic():
                 "received": data
             }), 400
         
-        user_id = data["user_id"]
+        user_id = userId
         subject_id = data["subject_id"]
         topic_id = data["topic_id"]
         completed = data.get("completed", True)

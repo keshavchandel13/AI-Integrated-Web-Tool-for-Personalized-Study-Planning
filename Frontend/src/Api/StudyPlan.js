@@ -1,10 +1,8 @@
-import axios from "axios";
-
-const url = `${import.meta.env.VITE_BACKEND_URL}`; 
+import api from "./axios"; 
 
 export const generatePlanforsubject = async (subjectId) => {
   try {
-    const response = await axios.post(`${url}/api/studyplan/generateplan`, { subject_id: subjectId }, {
+    const response = await api.post(`/studyplan/generateplan`, { subject_id: subjectId }, {
   headers: { "Content-Type": "application/json" },
 });
 
@@ -17,7 +15,7 @@ export const generatePlanforsubject = async (subjectId) => {
 
 export const getstudyplan = async(subjectId) =>{
   try{
-    const res = await axios.get(`${url}/api/studyplan/getstudyplan`,{
+    const res = await api.get(`/studyplan/getstudyplan`,{
     params: { subject_id: subjectId },
     });
     return res.data;
@@ -31,7 +29,7 @@ export const getstudyplan = async(subjectId) =>{
 
 export const completedTopic = async (data) => {
   try {
-    const res = await axios.post(`${url}/api/studyplan/topiccompleted`, data);
+    const res = await api.post(`/studyplan/topiccompleted`, data);
     return res.data;
   } catch (e) {
     console.error("Error marking topic completed:", e);
@@ -39,7 +37,7 @@ export const completedTopic = async (data) => {
 };
 
 export const getSubjectProgress = async (userId, subjectId) => {
-  const res = await axios.get(`${url}/api/progress/${userId}/${subjectId}`);
+  const res = await api.get(`/progress/${userId}/${subjectId}`);
   return res.data;
 };
 

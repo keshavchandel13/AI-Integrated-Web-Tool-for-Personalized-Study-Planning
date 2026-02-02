@@ -13,10 +13,6 @@ def add_syllabus():
 
     subject_id = request.form.get("subject_Id")
     syllabus_file = request.files.get("syllabus")
-
-    print("[DEBUG] subject_id received:", subject_id)
-    print("[DEBUG] syllabus_file received:", syllabus_file.filename if syllabus_file else None)
-
     if not subject_id or not syllabus_file:
         return jsonify({"error": "subject_id and syllabus file are required"}), 400
 
@@ -33,14 +29,11 @@ def add_syllabus():
     text = ""
     for page_num, page in enumerate(doc, start=1):
         page_text = page.get_text("text")
-        print(f"[DEBUG] Extracted text from page {page_num}: {len(page_text)} characters")
         text += page_text
     doc.close()
 
     # Split by newlines into topics
-    topics = [line.strip() for line in text.split("\n") if line.strip()]
-    print("[DEBUG] Total topics extracted:", len(topics))
-    print("[DEBUG] Sample topics:", topics[:5])  
+    topics = [line.strip() for line in text.split("\n") if line.strip()]  
 
     # Insert topics into syllabus table
     for idx, topic in enumerate(topics, start=1):
@@ -65,8 +58,6 @@ def get_syllabus():
     conn = get_db()
     cursor = conn.cursor()
     subject_id = request.args.get("subject_id")
-
-    print("[DEBUG] Fetching syllabus for subject_id:", subject_id)
 
     if not subject_id:
         return jsonify({"error": "subject_id is required"}), 400

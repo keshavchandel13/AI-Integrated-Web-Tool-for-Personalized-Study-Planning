@@ -1,10 +1,7 @@
-import axios from "axios";
-
-const url = `${import.meta.env.VITE_BACKEND_URL}`; 
-
+import api from "./axios";
 export const addSubject = async (subjectData) => {
   try {
-    const response = await axios.post(`${url}/api/subject/addsubject`, subjectData, {
+    const response = await api.post(`/subject/addsubject`, subjectData, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -17,7 +14,7 @@ export const addSubject = async (subjectData) => {
 };
 export const getSubjects = async (userId) => {
   try {
-    const response = await axios.get(`${url}/api/subject/getsubjects`, {
+    const response = await api.get(`/subject/getsubjects`, {
       params: { user_id: userId }, 
     });
     return response.data; 

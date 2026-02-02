@@ -1,10 +1,8 @@
-import axios from "axios";
-
-const url = `${import.meta.env.VITE_BACKEND_URL}`; 
+import api from "./axios";
 
 export const addsyllabus = async (formData) => {
   try {
-    const response = await axios.post(`${url}/api/syllabus/addsyllabus`, formData, {
+    const response = await api.post(`/syllabus/addsyllabus`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -18,7 +16,7 @@ export const addsyllabus = async (formData) => {
 ;
 export const getsyllabus = async (subject_id) => {
   try {
-    const response = await axios.get(`${url}/api/syllabus/getsyllabus`, {
+    const response = await api.get(`/syllabus/getsyllabus`, {
       params: { subject_id: subject_id }, 
     });
     return response.data; 

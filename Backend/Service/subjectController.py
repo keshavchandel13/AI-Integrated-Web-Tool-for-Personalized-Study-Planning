@@ -1,13 +1,13 @@
 from flask import request, jsonify
 from config.db import get_db
 
-def add_subject():
+def add_subject(userId):
     try:
         conn = get_db()
         cursor = conn.cursor()
         data = request.get_json()
 
-        user_id = data.get("user_id")
+        user_id = userId
         print(user_id)
         title = data.get("title")
         subject_name = data.get("subject_name")
@@ -36,11 +36,11 @@ def add_subject():
             conn.close()
         return jsonify({"error": str(e)}), 500
     
-def get_subjects():
+def get_subjects(userId):
     try:
         conn = get_db()
         cursor = conn.cursor()
-        user_id = request.args.get("user_id")
+        user_id = userId
         if not user_id:
             return jsonify({"error": "user_id is required"}), 400
 
