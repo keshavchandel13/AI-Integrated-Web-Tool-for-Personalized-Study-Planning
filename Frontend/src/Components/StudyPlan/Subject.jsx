@@ -8,7 +8,6 @@ import { generatePlanforsubject, getstudyplan } from "../../Api/StudyPlan";
 export default function Subject({ userId }) {
   const [subjects, setSubjects] = useState([]);
   const [plans, setPlans] = useState({});
-  console.log(plans)
 
   const getStudyPlan = async () => {
     try {
@@ -28,7 +27,7 @@ export default function Subject({ userId }) {
   const fetchSubjects = async () => {
     try {
       const res = await getSubjects(userId);
-      setSubjects(res);
+      setSubjects(res); 
     } catch (err) {
       console.log("Error fetching subjects:", err);
     }
@@ -44,14 +43,23 @@ export default function Subject({ userId }) {
     }
   }, [subjects]);
 
+  // Sort the subject on the basis of completed
+  const sortedSubject = [...subjects].sort((a,b)=>{
+    if(a.completed!==b.completed){
+      return a.completed - b.completed
+    }
+    return new Date(a.start_date) - new Date(b.start_date)
+  })
+  // subjects = sortedSubject
+
   return (
     <div className="space-y-6">
-      {subjects.length === 0 ? (
+      {sortedSubject.length === 0 ? (
         <p className="text-purple-500 text-center text-lg font-medium">
           No subjects found.
         </p>
       ) : (
-        subjects.map((item) => (
+        sortedSubject.map((item) => (
           <div
             key={item.id}
             className="bg-white border dark:bg-gray-900 border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition overflow-hidden"
