@@ -39,10 +39,6 @@ def split_sentences(text):
 
 
 def clean_ai_json(raw_text):
-    """
-    Cleans and parses AI-generated text into valid JSON.
-    Handles cases where AI wraps the JSON inside markdown ```json ... ``` blocks.
-    """
     if not raw_text:
         return []
 
@@ -65,7 +61,6 @@ def clean_ai_json(raw_text):
 
 
 def getQuestions(sentences, difficulty):
-    """Generate multiple-choice questions from text using Gemini API."""
     client = genai.Client()
 
     prompt = f"""
@@ -92,15 +87,6 @@ def getQuestions(sentences, difficulty):
     return questions if questions else text  
 #  CREATE QUIZ SERVICE
 def create_quiz_service(data):
-    """
-    Creates a quiz for a topic.
-    Expects data = {
-        'topic': 'Binary Search',
-        'difficulty': 'Medium',
-        'subject_id': 2,
-        'topic_id': 12
-    }
-    """
     topic = data.get('topic')
     difficulty = data.get('difficulty', 'Medium')
     subject_id = data.get('subject_id')

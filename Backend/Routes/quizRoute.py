@@ -1,10 +1,11 @@
 from flask import Blueprint, request, jsonify
 from Service.QuizController import create_quiz_service, get_quiz_service
-
+from middleware.jwt import token_required
 
 quiz_bp = Blueprint('quiz', __name__)
 
 @quiz_bp.route('/quiz', methods=['POST'])
+@token_required
 def create_quiz():
     try:
         data = request.get_json()
@@ -16,11 +17,8 @@ def create_quiz():
 
 
 @quiz_bp.route('/quiz', methods=['GET'])
+@token_required
 def get_quiz():
-    """
-    Get quizzes by topic_id.
-    Example: /api/quiz?topic_id=2
-    """
     try:
         topic_id = request.args.get('topic_id')
         result = get_quiz_service(topic_id)

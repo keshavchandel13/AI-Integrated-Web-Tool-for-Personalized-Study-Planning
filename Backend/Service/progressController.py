@@ -3,26 +3,14 @@ from flask import request, jsonify
 from config.db import get_db
 from datetime import datetime
 
-def update_progress():
-    """
-    POST /api/progress/update
-    body:
-    {
-      "user_id": 1,
-      "subject_id": 2,
-      "topic_id": 3,
-      "quiz_score": 85,         # optional
-      "completed": true,        # optional
-      "time_spent": 45          # optional (minutes)
-    }
-    """
+def update_progress(userId):
     data = request.get_json() or {}
 
-    required_fields = ["user_id", "subject_id", "topic_id"]
+    required_fields = ["subject_id", "topic_id"]
     if not all(field in data for field in required_fields):
         return jsonify({"error": "Missing required fields"}), 400
 
-    user_id = data["user_id"]
+    user_id = userId
     subject_id = data["subject_id"]
     topic_id = data["topic_id"]
     quiz_score = data.get("quiz_score", None)
@@ -71,21 +59,6 @@ def update_progress():
 
 
 def get_progress(user_id, subject_id):
-    """
-    GET /api/progress/<user_id>/<subject_id>
-    Returns:
-    {
-      "user_id": 1,
-      "subject_id": 2,
-      "completion_percent": 60.0,
-      "total_topics": 10,
-      "completed_topics": 6,
-      "topics": [
-         { "topic_id": 5, "topic": "Arrays", "subtopic": "Arrays - basics", "completed": true, "time_spent": 30, "quiz_score": 80 },
-         ...
-      ]
-    }
-    """
     try:
         conn = get_db()
         cursor = conn.cursor()

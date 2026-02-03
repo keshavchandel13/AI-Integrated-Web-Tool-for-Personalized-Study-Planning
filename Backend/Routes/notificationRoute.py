@@ -1,17 +1,17 @@
-from flask import Blueprint, request
+from flask import Blueprint, request,g
 from Service.notifications import getnotifications, createnotifications
-
+from middleware.jwt import token_required
 # Blueprint instance
 notifications_bp = Blueprint('notifications_bp', __name__)
 
 #  Get notifications for a specific user
 @notifications_bp.route('/<int:userId>', methods=['GET'])
-def getnotification(userId):
-    return getnotifications(userId)
+@token_required
+def getnotification():
+    return getnotifications(g.user_id)
 
 #  Create notifications for all users (or specific user if passed)
 @notifications_bp.route('/', methods=['POST'])
+@token_required
 def createnotification():
-    data = request.get_json()
-    user_id = data.get('user_id') if data else None 
-    return createnotifications(user_id)
+    return createnotifications(g.user_id)
