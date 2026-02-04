@@ -17,6 +17,9 @@ export default function SubjectCard({ subject }) {
                     <p className="text-purple-400 text-sm">
                         {subject.subject_name}
                     </p>
+                    <p className={subject.completed?"text-green-600":"text-yellow-400 text-sm"}>
+                        {subject.completed?"Completed":"Ongoing"}
+                    </p>
 
                     {subject.grade && (
                         <p className="text-gray-400 text-sm mt-1">

@@ -24,6 +24,8 @@ export default function Progress() {
     }
   };
 
+
+
   //  Fetch progress for each subject
   const fetchProgress = async (subjectId) => {
     try {
@@ -54,15 +56,26 @@ export default function Progress() {
     };
     if (subjects.length > 0) loadProgress();
   }, [subjects]);
+    if(subjects.length===0){
+    console.log(subjects)
+    return <p>No subject found</p>
+  }
+
+  const sortedSubject = [...subjects].sort((a,b)=>{
+    if(a.completed!=b.completed){
+      return a.completed - b.completed
+    }
+    return a.start_date - b.start_date
+  })
 
   return (
     <div className="p-6">
-      {subjects.length === 0 ? (
+      {sortedSubject.length === 0 ? (
         <p className="text-purple-500 text-center text-lg font-medium">
           No subjects found.
         </p>
       ) : (
-        subjects.map((item) => {
+        sortedSubject.map((item) => {
           const progress = progressData[item.id] || 0;
 
           // Pie Chart Data
