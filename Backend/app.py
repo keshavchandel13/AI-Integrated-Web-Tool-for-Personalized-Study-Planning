@@ -35,6 +35,7 @@ app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 app.config['CLOUDINARY_API_KEY'] = os.getenv('CLOUDINARY_API_KEY')
 app.config['CLOUDINARY_CLOUD_NAME'] = os.getenv('CLOUDINARY_CLOUD_NAME')
 app.config['CLOUDINARY_API_SECRET'] = os.getenv('CLOUDINARY_API_SECRET')
+app.config['GEMINI_API_KEY'] = os.getenv('GEMINI_API_KEY')
 
 # Initialize extensions
 bcrypt.init_app(app)

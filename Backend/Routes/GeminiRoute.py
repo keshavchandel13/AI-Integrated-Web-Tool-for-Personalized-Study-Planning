@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify,current_app
 from google import genai
 import os
 
@@ -6,7 +6,6 @@ import os
 mentor_bp = Blueprint("mentor_bp", __name__)
 
 
-client = genai.Client(api_key="")
 MENTOR_TEMPLATE = """
 You are EduPilot Mentor — a friendly, helpful, practical study mentor.
 
@@ -26,6 +25,8 @@ User: "{user_input}"
 @mentor_bp.route("/mentor", methods=["POST"])
 def ask_gemini():
     try:
+        api = current_app.config['GEMINI_API_KEY']
+        client = genai.Client(api_key=api)
         data = request.get_json()
         prompt = data.get("prompt", "")
         final_prompt = MENTOR_TEMPLATE.format(user_input=prompt)

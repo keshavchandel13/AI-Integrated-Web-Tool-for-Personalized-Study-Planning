@@ -9,16 +9,19 @@ export default function ProfileEdit({ user, onCancel, onSave }) {
     avatar: null,
   });
 
+  const [preview, setPreview] = useState(user.avatar || null);
+
   function handleChange(e) {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm(prev => ({ ...prev, [name]: value }));
   }
 
   function handleFileChange(e) {
-    setForm((prev) => ({
-      ...prev,
-      avatar: e.target.files[0], 
-    }));
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setForm(prev => ({ ...prev, avatar: file }));
+    setPreview(URL.createObjectURL(file));
   }
 
   function handleSubmit() {
@@ -34,67 +37,115 @@ export default function ProfileEdit({ user, onCancel, onSave }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] p-8">
-      <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl border space-y-4">
+    <div className="bg-[#F8FAFC] min-h-[80vh]">
 
-        <h2 className="text-2xl font-bold">Edit Profile</h2>
+      <div className="
+        max-w-2xl mx-auto
+        px-3 sm:px-6 md:px-8
+        py-6 md:py-10
+      ">
 
-        <input
-          name="username"
-          value={form.username}
-          onChange={handleChange}
-          className="w-full border rounded-lg p-3"
-          placeholder="Username"
-        />
+        <div className="
+          bg-white
+          rounded-3xl
+          border
+          shadow-sm
+          p-5 sm:p-8
+          space-y-6
+        ">
 
-        <input
-          name="college"
-          value={form.college}
-          onChange={handleChange}
-          className="w-full border rounded-lg p-3"
-          placeholder="College"
-        />
+          <h2 className="text-xl sm:text-2xl font-bold text-center">
+            Edit Profile
+          </h2>
 
-        <input
-          name="branch"
-          value={form.branch}
-          onChange={handleChange}
-          className="w-full border rounded-lg p-3"
-          placeholder="Branch"
-        />
+          {/* Avatar preview */}
+          <div className="flex flex-col items-center gap-3">
 
-        <input
-          name="aiPersona"
-          value={form.aiPersona}
-          onChange={handleChange}
-          className="w-full border rounded-lg p-3"
-          placeholder="AI Persona"
-        />
+            <div className="
+              w-24 h-24 sm:w-28 sm:h-28
+              rounded-2xl overflow-hidden
+              border bg-gray-100
+            ">
+              {preview ? (
+                <img
+                  src={preview}
+                  alt="preview"
+                  className="w-full h-full object-cover"
+                />
+              ) : null}
+            </div>
 
-        {/* Avatar upload */}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          className="w-full border rounded-lg p-3"
-        />
+            <label className="
+              text-sm text-indigo-600 cursor-pointer hover:underline
+            ">
+              Change avatar
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </label>
+          </div>
 
-        <div className="flex gap-3 pt-4">
-          <button
-            onClick={handleSubmit}
-            className="bg-indigo-600 text-white px-6 py-2 rounded-lg"
-          >
-            Save
-          </button>
+          {/* Fields */}
+          <div className="grid gap-4">
 
-          <button
-            onClick={onCancel}
-            className="border px-6 py-2 rounded-lg"
-          >
-            Cancel
-          </button>
+            {[
+              { name: "username", placeholder: "Username" },
+              { name: "college", placeholder: "College" },
+              { name: "branch", placeholder: "Branch" },
+              { name: "aiPersona", placeholder: "AI Persona" },
+            ].map(field => (
+              <input
+                key={field.name}
+                name={field.name}
+                value={form[field.name]}
+                onChange={handleChange}
+                placeholder={field.placeholder}
+                className="
+                  w-full border rounded-xl p-3
+                  focus:outline-none
+                  focus:ring-2 focus:ring-indigo-500
+                  transition
+                "
+              />
+            ))}
+
+          </div>
+
+          {/* Buttons */}
+          <div className="
+            flex flex-col sm:flex-row
+            gap-3 pt-2
+          ">
+            <button
+              onClick={handleSubmit}
+              className="
+                bg-indigo-600 text-white
+                px-6 py-3 rounded-xl
+                hover:bg-indigo-700
+                transition
+                w-full
+              "
+            >
+              Save changes
+            </button>
+
+            <button
+              onClick={onCancel}
+              className="
+                border px-6 py-3 rounded-xl
+                hover:bg-gray-50
+                transition
+                w-full
+              "
+            >
+              Cancel
+            </button>
+          </div>
+
         </div>
-
       </div>
     </div>
   );
