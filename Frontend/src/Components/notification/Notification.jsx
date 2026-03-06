@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { getNotifications } from "../../Api/notification";
 import { Bell } from "lucide-react";
 
-const Notifications = ({ userId }) => {
+const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getNotifications(userId);
+        const data = await getNotifications();
         console.log("Fetched notifications:", data);
         // Data is an array, not an object with `notifications`
         setNotifications(Array.isArray(data) ? data : []);
@@ -20,7 +20,7 @@ const Notifications = ({ userId }) => {
       }
     };
     fetchData();
-  }, [userId]);
+  }, []);
 
   if (loading) return <p className="p-3 text-gray-500">Loading notifications...</p>;
 

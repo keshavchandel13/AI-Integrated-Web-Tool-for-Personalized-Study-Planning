@@ -24,7 +24,7 @@ export default function Subject({ userId }) {
       const res = await getSubjects(userId);
       setSubjects(res);
     } catch (err) {
-      toast(err);
+      toast.error(err);
     } finally {
       setLoading(false);
     }
@@ -42,7 +42,7 @@ export default function Subject({ userId }) {
         fetchSubjects();
       }
     } catch (err) {
-      toast(err);
+      toast.error(err);
     } finally {
       setLoading(false);
     }

@@ -5,9 +5,11 @@ from middleware.jwt import token_required
 notifications_bp = Blueprint('notifications_bp', __name__)
 
 #  Get notifications for a specific user
-@notifications_bp.route('/<int:userId>', methods=['GET'])
+@notifications_bp.route('/getnotification', methods=['GET'])
 @token_required
 def getnotification():
+    print(g.user_id)
+    print("i am called")
     return getnotifications(g.user_id)
 
 #  Create notifications for all users (or specific user if passed)

@@ -62,6 +62,7 @@ def login_controller():
         "username": user["username"],
         "email": user["email"],
         "branch": user["branch"],
+        "avatar": user['avatar'],
         "access_token": token
         }
     return jsonify({"message": "Login successful", 'user':user_data}), 200

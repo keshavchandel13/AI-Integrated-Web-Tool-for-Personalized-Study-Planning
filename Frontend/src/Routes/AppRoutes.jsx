@@ -8,7 +8,6 @@ import StudyPlan from "../Pages/StudyPlan";
 import Progress from "../Pages/Progress";
 import Quizes from "../Pages/Quizes";
 import PrefrenceForm from "../Components/StudyPlan/PrefrenceForm";
-import MentorChat from "../Components/mentorchat/MentorChat";
 import AIBot from "../Pages/AIBot";
 import Profile from "../Pages/Profile";
 import { useAuth } from "../context/authcontext";

@@ -32,7 +32,7 @@ const TodayTopics = ({ userId }) => {
 
         setPlans(allPlans);
       } catch {
-        toast("Error fetching Today's Topic");
+        toast.error("Error fetching Today's Topic");
       } finally {
         setLoading(false);
       }

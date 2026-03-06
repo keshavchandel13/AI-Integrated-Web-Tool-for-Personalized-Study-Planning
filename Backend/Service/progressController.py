@@ -63,27 +63,114 @@ def get_progress(user_id, subject_id):
         conn = get_db()
         cursor = conn.cursor()
 
-        # total topics for subject (from syllabus)
-        cursor.execute("SELECT COUNT(*) FROM syllabus WHERE subject_id = ?", (subject_id,))
+        # Total topics
+        cursor.execute(
+            "SELECT COUNT(*) FROM syllabus WHERE subject_id = ?",
+            (subject_id,)
+        )
         total_topics = cursor.fetchone()[0] or 0
 
-        # completed topics for this user+subject
+        # Completed topics
         cursor.execute("""
-            SELECT COUNT(DISTINCT topic_id) FROM progress
+            SELECT COUNT(DISTINCT topic_id)
+            FROM progress
             WHERE user_id = ? AND subject_id = ? AND completed = 1
         """, (user_id, subject_id))
         completed_topics = cursor.fetchone()[0] or 0
 
-        completion_percent = round((completed_topics / total_topics) * 100, 2) if total_topics > 0 else 0.0
+        completion_percent = (
+            round((completed_topics / total_topics) * 100, 2)
+            if total_topics > 0 else 0
+        )
 
-        # fetch topic-level details: left join syllabus with progress (if exists)
+        # Average quiz score
+        cursor.execute("""
+            SELECT AVG(quiz_score)
+            FROM progress
+            WHERE user_id = ? AND subject_id = ? AND quiz_score IS NOT NULL
+        """, (user_id, subject_id))
+        avg_quiz_score = cursor.fetchone()[0]
+        avg_quiz_score = round(avg_quiz_score, 2) if avg_quiz_score else 0
+
+        # Total study time
+        cursor.execute("""
+            SELECT SUM(time_spent)
+            FROM progress
+            WHERE user_id = ? AND subject_id = ?
+        """, (user_id, subject_id))
+        total_study_time = cursor.fetchone()[0] or 0
+
+        # Estimated time from syllabus
+        cursor.execute("""
+            SELECT SUM(estimated_time)
+            FROM syllabus
+            WHERE subject_id = ?
+        """, (subject_id,))
+        estimated_time = cursor.fetchone()[0] or 0
+
+        # Study efficiency
+        efficiency_score = 0
+        if estimated_time > 0:
+            efficiency_score = round(
+                min((estimated_time / (total_study_time + 1)) * 100, 100), 2
+            )
+
+        # Weak topics (quiz_score < 50)
+        cursor.execute("""
+            SELECT s.topic, s.subtopic, p.quiz_score
+            FROM progress p
+            JOIN syllabus s ON p.topic_id = s.id
+            WHERE p.user_id = ?
+            AND p.subject_id = ?
+            AND p.quiz_score IS NOT NULL
+            AND p.quiz_score < 50
+        """, (user_id, subject_id))
+
+        weak_topics = []
+        rows = cursor.fetchall()
+        for row in rows:
+            weak_topics.append({
+                "topic": row[0],
+                "subtopic": row[1],
+                "quiz_score": row[2]
+            })
+
+        # Difficulty progress
         cursor.execute("""
             SELECT
-                s.id AS topic_id,
+                s.difficulty,
+                COUNT(*) as total,
+                SUM(CASE WHEN p.completed = 1 THEN 1 ELSE 0 END) as completed
+            FROM syllabus s
+            LEFT JOIN progress p
+              ON s.id = p.topic_id AND p.user_id = ? AND p.subject_id = ?
+            WHERE s.subject_id = ?
+            GROUP BY s.difficulty
+        """, (user_id, subject_id, subject_id))
+
+        difficulty_progress = []
+        for row in cursor.fetchall():
+            difficulty_progress.append({
+                "difficulty": row[0],
+                "total": row[1],
+                "completed": row[2] or 0
+            })
+
+        # Exam readiness score
+        exam_readiness = round(
+            (completion_percent * 0.5) +
+            (avg_quiz_score * 0.3) +
+            (efficiency_score * 0.2), 2
+        )
+
+        # Topic level details
+        cursor.execute("""
+            SELECT
+                s.id,
                 s.topic,
                 s.subtopic,
-                COALESCE(p.completed, 0) AS completed,
-                COALESCE(p.time_spent, 0) AS time_spent,
+                COALESCE(p.completed, 0),
+                COALESCE(p.time_spent, 0),
                 p.quiz_score
             FROM syllabus s
             LEFT JOIN progress p
@@ -92,25 +179,36 @@ def get_progress(user_id, subject_id):
             ORDER BY s.id ASC
         """, (user_id, subject_id, subject_id))
 
-        rows = cursor.fetchall()
         topics = []
+        rows = cursor.fetchall()
+
         for row in rows:
-            topic_id, topic_name, subtopic, completed_flag, time_spent, quiz_score = row
             topics.append({
-                "topic_id": topic_id,
-                "topic": topic_name,
-                "subtopic": subtopic,
-                "completed": bool(completed_flag),
-                "time_spent": time_spent,
-                "quiz_score": quiz_score
+                "topic_id": row[0],
+                "topic": row[1],
+                "subtopic": row[2],
+                "completed": bool(row[3]),
+                "time_spent": row[4],
+                "quiz_score": row[5]
             })
 
         return jsonify({
             "user_id": user_id,
             "subject_id": subject_id,
+
             "completion_percent": completion_percent,
             "total_topics": total_topics,
             "completed_topics": completed_topics,
+
+            "avg_quiz_score": avg_quiz_score,
+            "total_study_time": total_study_time,
+            "estimated_study_time": estimated_time,
+            "efficiency_score": efficiency_score,
+            "exam_readiness": exam_readiness,
+
+            "weak_topics": weak_topics,
+            "difficulty_progress": difficulty_progress,
+
             "topics": topics
         }), 200
 

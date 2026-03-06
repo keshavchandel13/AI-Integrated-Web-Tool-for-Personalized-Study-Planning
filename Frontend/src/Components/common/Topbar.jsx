@@ -11,6 +11,7 @@ export default function Topbar() {
   } catch {
     user = null;
   }
+  console.log(user)
 
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -57,16 +58,17 @@ export default function Topbar() {
 
           {showNotifications && (
             <div className="absolute right-0 mt-2 w-[90vw] max-w-sm z-50">
-              <Notifications userId={user?.id} />
+              <Notifications  />
             </div>
           )}
         </div>
 
         {/* Messages */}
+        <Link to={"/aibot"}>
         <button className="p-2 rounded-md text-purple-600 hover:bg-purple-50 dark:hover:bg-gray-800">
           <FiMessageCircle className="w-5 h-5" />
         </button>
-
+          </Link>
         {/* Profile */}
         <Link to="/profile" className="flex items-center gap-2">
 

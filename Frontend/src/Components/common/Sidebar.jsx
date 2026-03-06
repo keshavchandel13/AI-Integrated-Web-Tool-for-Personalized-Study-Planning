@@ -69,17 +69,17 @@ export default function Sidebar() {
       )}
 
       {/* Sidebar */}
-      <div
-        className={`
-          fixed md:static z-50
-          min-h-screen w-60 p-5 transition-transform duration-300
-          bg-gradient-to-b from-purple-50 to-blue-50
-          dark:from-gray-900 dark:to-gray-950
-          text-black dark:text-gray-200
-          ${open ? "translate-x-0" : "-translate-x-full"}
-          md:translate-x-0
-        `}
-      >
+<div
+  className={`
+    fixed md:fixed top-0 left-0 z-50
+    h-screen w-60 p-5 transition-transform duration-300
+    bg-gradient-to-b from-purple-50 to-blue-50
+    dark:from-gray-900 dark:to-gray-950
+    text-black dark:text-gray-200
+    ${open ? "translate-x-0" : "-translate-x-full"}
+    md:translate-x-0
+  `}
+>
         {/* Header */}
         <div className="flex items-center p-2">
           <div

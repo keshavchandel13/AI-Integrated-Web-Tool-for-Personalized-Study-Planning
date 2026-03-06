@@ -1,8 +1,8 @@
 import api from "./axios";
 
 //  Fetch user notifications
-export const getNotifications = async (userId) => {
-  const res = await api.get(`/notifications/${userId}`);
+export const getNotifications = async () => {
+  const res = await api.get(`/notifications/getnotification`);
   
   return res.data;
 };
