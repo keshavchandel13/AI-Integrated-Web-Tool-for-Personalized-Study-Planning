@@ -62,7 +62,7 @@ def clean_ai_json(raw_text):
 
 def getQuestions(sentences, difficulty):
     client = genai.Client()
-
+ 
     prompt = f"""
     Generate 5 multiple-choice questions based on the following content:
     {sentences}

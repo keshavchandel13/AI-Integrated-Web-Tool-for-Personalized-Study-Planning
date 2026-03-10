@@ -3,17 +3,19 @@ import { GraduationCap, Zap, Pencil } from "lucide-react";
 
 export default function ProfileView({ user, onEdit }) {
   return (
-    <div className="bg-[#F8FAFC] text-slate-900">
+    <div className="bg-[#F8FAFC] dark:bg-gray-900 text-slate-900 dark:text-gray-100">
 
       <main className="px-3 sm:px-6 md:px-8 py-6 md:py-10 max-w-7xl mx-auto">
 
         {/* Header */}
-        <div className="bg-white rounded-3xl p-4 sm:p-6 md:p-8 border relative">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl p-4 sm:p-6 md:p-8 border border-gray-200 dark:border-gray-700 relative">
 
           <button
             onClick={onEdit}
             className="
-              flex items-center gap-1 text-sm text-indigo-600 hover:underline
+              flex items-center gap-1 text-sm
+              text-indigo-600 dark:text-indigo-400
+              hover:underline
               sm:absolute sm:top-6 sm:right-6
               mb-4 sm:mb-0
             "
@@ -21,12 +23,14 @@ export default function ProfileView({ user, onEdit }) {
             <Pencil className="w-4 h-4" /> Edit
           </button>
 
-          <div className="
+          <div
+            className="
             flex flex-col sm:flex-row
             items-center sm:items-start
             gap-4 sm:gap-6
             text-center sm:text-left
-          ">
+          "
+          >
 
             <img
               src={user.avatar}
@@ -39,25 +43,33 @@ export default function ProfileView({ user, onEdit }) {
 
             <div className="min-w-0">
 
-              <h1 className="
+              <h1
+                className="
                 text-xl sm:text-2xl md:text-3xl
                 font-bold truncate
-              ">
+              "
+              >
                 {user.username}
               </h1>
 
-              <p className="
-                text-indigo-600 font-semibold
+              <p
+                className="
+                text-indigo-600 dark:text-indigo-400
+                font-semibold
                 flex items-center justify-center sm:justify-start gap-1
                 text-sm sm:text-base
-              ">
+              "
+              >
                 <Zap className="w-4 h-4" /> {user.aiPersona}
               </p>
 
-              <div className="
+              <div
+                className="
                 flex flex-wrap justify-center sm:justify-start
-                items-center gap-2 mt-2 text-slate-600 text-sm
-              ">
+                items-center gap-2 mt-2
+                text-slate-600 dark:text-gray-400 text-sm
+              "
+              >
                 <GraduationCap className="w-4 h-4" />
                 <span className="break-words">
                   {user.college} | {user.branch}
@@ -69,16 +81,20 @@ export default function ProfileView({ user, onEdit }) {
         </div>
 
         {/* Stats */}
-        <div className="
+        <div
+          className="
           grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4
           gap-3 sm:gap-4 mt-8
-        ">
+        "
+        >
           {user.studyStats?.map((stat, i) => (
-            <div key={i} className="bg-white p-4 rounded-xl border">
-
+            <div
+              key={i}
+              className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700"
+            >
               <stat.icon className={`w-5 h-5 ${stat.color}`} />
 
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-400 dark:text-gray-400 mt-1">
                 {stat.label}
               </p>
 
@@ -94,27 +110,29 @@ export default function ProfileView({ user, onEdit }) {
           {user.completedCourses?.map(course => (
             <div
               key={course.id}
-              className="bg-white p-4 sm:p-6 rounded-2xl border"
+              className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-2xl border border-gray-200 dark:border-gray-700"
             >
-              <h3 className="
+              <h3
+                className="
                 font-bold text-base sm:text-lg
                 break-words
-              ">
+              "
+              >
                 {course.title}
               </h3>
 
-              <p className="text-sm text-slate-400 mt-1">
+              <p className="text-sm text-slate-400 dark:text-gray-400 mt-1">
                 {course.date} • Grade {course.grade}
               </p>
 
-              <div className="
-                flex flex-wrap gap-2 mt-3
-              ">
+              <div className="flex flex-wrap gap-2 mt-3">
                 {course.skills.map((s, i) => (
                   <span
                     key={i}
                     className="
-                      text-xs bg-slate-100 px-2 py-1 rounded
+                      text-xs
+                      bg-slate-100 dark:bg-gray-700
+                      px-2 py-1 rounded
                     "
                   >
                     {s}
@@ -122,10 +140,13 @@ export default function ProfileView({ user, onEdit }) {
                 ))}
               </div>
 
-              <p className="
-                text-sm italic mt-3 text-indigo-700
+              <p
+                className="
+                text-sm italic mt-3
+                text-indigo-700 dark:text-indigo-400
                 break-words
-              ">
+              "
+              >
                 AI Insight: {course.aiInsight}
               </p>
             </div>

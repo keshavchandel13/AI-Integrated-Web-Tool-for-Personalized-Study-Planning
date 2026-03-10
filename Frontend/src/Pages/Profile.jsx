@@ -51,13 +51,18 @@ export default function ProfileContainer() {
 
   // Shared responsive container
   const Wrapper = ({ children }) => (
-    <div className="
+    <div
+      className="
       w-full
       max-w-5xl
       mx-auto
       px-3 sm:px-6 md:px-8
       py-6 md:py-10
-    ">
+      bg-white dark:bg-gray-900
+      text-gray-900 dark:text-gray-100
+      min-h-[calc(100vh-100px)]
+    "
+    >
       {children}
     </div>
   );
@@ -66,7 +71,7 @@ export default function ProfileContainer() {
   if (loading) {
     return (
       <Wrapper>
-        <div className="text-slate-500 text-center animate-pulse">
+        <div className="text-slate-500 dark:text-gray-400 text-center animate-pulse">
           Loading profile...
         </div>
       </Wrapper>
@@ -81,9 +86,17 @@ export default function ProfileContainer() {
           <p className="text-red-500 font-medium text-sm sm:text-base">
             Unable to load profile
           </p>
+
           <button
             onClick={loadUser}
-            className="px-4 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition w-full sm:w-auto"
+            className="
+            px-4 py-2 rounded-lg
+            bg-purple-600 text-white
+            hover:bg-purple-700
+            transition
+            w-full sm:w-auto
+            dark:bg-purple-500 dark:hover:bg-purple-600
+            "
           >
             Retry
           </button>

@@ -54,7 +54,8 @@ export default function AIBot() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-102px)] w-full max-w-4xl mx-auto">
+    <div className="flex flex-col h-[calc(100vh-102px)] w-full max-w-4xl mx-auto 
+    bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
 
       <ToastContainer
         position="top-right"
@@ -71,17 +72,18 @@ export default function AIBot() {
       />
 
       {/* Header */}
-      <div className="p-3 border-b bg-white sticky top-0 z-10">
-        <h1 className="text-center text-2xl md:text-3xl font-semibold">
+      <div className="p-3 border-b bg-white dark:bg-gray-800 dark:border-gray-700 sticky top-0 z-10">
+        <h1 className="text-center text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white">
           Mentor
         </h1>
       </div>
 
       {/* Chat messages */}
-      <div className="flex-grow overflow-y-auto px-3 py-2 space-y-2 bg-gray-50">
+      <div className="flex-grow overflow-y-auto px-3 py-2 space-y-2 
+      bg-gray-50 dark:bg-gray-900">
 
         {messages.length === 0 && !loading && (
-          <div className="text-center text-gray-400 mt-10">
+          <div className="text-center text-gray-400 dark:text-gray-500 mt-10">
             Start a conversation…
           </div>
         )}
@@ -89,14 +91,14 @@ export default function AIBot() {
         <MessageBubble messages={messages} username={username} />
 
         {loading && (
-          <div className="animate-pulse text-gray-500 text-sm px-2">
+          <div className="animate-pulse text-gray-500 dark:text-gray-400 text-sm px-2">
             Mentor is thinking…
           </div>
         )}
       </div>
 
       {/* Chat input */}
-      <div className="p-2 border-t bg-white">
+      <div className="p-2 border-t bg-white dark:bg-gray-800 dark:border-gray-700">
         <ChatInput
           query={query}
           setQuerychange={setQuerychange}

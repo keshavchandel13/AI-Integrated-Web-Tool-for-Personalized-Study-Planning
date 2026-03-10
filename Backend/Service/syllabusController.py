@@ -5,8 +5,53 @@ import os
 import uuid
 
 UPLOAD_FOLDER = "uploads/syllabus/"  
+import json
+from google import genai
+def extract_topics(text):
+    try:
+        client = genai.Client()
 
-# Add syllabus
+        prompt = f"""
+Extract only syllabus topics from the following text.
+
+Ignore explanations, descriptions, and paragraphs.
+
+Return JSON in this format:
+
+{{
+ "topics":[
+   {{
+     "topic":"Normalization",
+     "difficulty":"hard"
+   }},
+   {{
+     "topic":"Indexing",
+     "difficulty":"medium"
+   }}
+ ]
+}}
+
+Text:
+{text[:6000]}
+"""
+
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt
+        )
+
+        data_text = response.text.strip()
+
+        if data_text.startswith("```"):
+            data_text = data_text.replace("```json", "").replace("```", "").strip()
+
+        data = json.loads(data_text)
+
+        return data.get("topics", [])
+
+    except Exception as e:
+        print("AI extraction error:", e)
+        return []
 def add_syllabus():
     conn = get_db()
     cursor = conn.cursor()
@@ -32,17 +77,24 @@ def add_syllabus():
         text += page_text
     doc.close()
 
-    # Split by newlines into topics
-    topics = [line.strip() for line in text.split("\n") if line.strip()]  
+    topics = extract_topics(text)
+
+    if not topics:
+        return jsonify({"error": "AI failed to extract topics"}), 500
+    cursor.execute("DELETE FROM syllabus WHERE subject_id = ?", (subject_id,))
 
     # Insert topics into syllabus table
-    for idx, topic in enumerate(topics, start=1):
+    for topic in topics:
         cursor.execute(
             """
             INSERT INTO syllabus (subject_id, topic, difficulty)
             VALUES (?, ?, ?)
             """,
-            (subject_id, topic, "medium")
+            (
+                subject_id,
+                topic.get("topic"),
+                topic.get("difficulty", "medium")
+            )
         )
     conn.commit()
     conn.close()

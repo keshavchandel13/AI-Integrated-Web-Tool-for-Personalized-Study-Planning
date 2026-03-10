@@ -1,6 +1,5 @@
 from flask import request, jsonify
 from config.db import get_db
-
 def add_subject(userId):
     try:
         conn = get_db()
