@@ -62,12 +62,12 @@ def add_syllabus():
         return jsonify({"error": "subject_id and syllabus file are required"}), 400
 
     # Save file with unique name
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+    UPLOAD_FOLDER = os.path.join(os.getcwd(), "uploads", "syllabus")
     filename = f"{uuid.uuid4().hex}.pdf"
     file_path = os.path.join(UPLOAD_FOLDER, filename)
     syllabus_file.save(file_path)
 
-    print("[DEBUG] File saved at:", file_path)
+
 
     # Extract text from PDF
     doc = fitz.open(file_path)
